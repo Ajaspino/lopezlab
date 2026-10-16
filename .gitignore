@@ -18,3 +18,4 @@ _crawl/
 # Trozos intermedios de traducción (el resultado final está en site/src/data/i18n y TRADUCCIONES/)
 _i18n/*.chunk_*.json
 _i18n/chunk_*.json
+_logos/

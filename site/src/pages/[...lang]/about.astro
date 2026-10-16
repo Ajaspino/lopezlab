@@ -18,6 +18,10 @@ for (const g of a.method.clients) for (const n of g.names) {
   if (!cur || (cur === cur.toLowerCase() && n !== n.toLowerCase())) byKey.set(k, n);   // si hay dos grafías, gana la que lleva mayúsculas
 }
 const clientNames = [...byKey.values()].map(pretty).sort((x, y) => x.localeCompare(y, lang, { sensitivity: 'base', ignorePunctuation: true }));
+// Logos en SVG de un solo color (currentColor: negro, y blanco en modo oscuro). Los clientes sin logo se muestran con su nombre.
+const logoFiles = import.meta.glob('../../assets/clients/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders' };
+const logoFor = (n: string) => { const f = logoByKey[norm(n)]; return f ? logoFiles[`../../assets/clients/${f}.svg`] : undefined; };
 export const getStaticPaths = () => langStaticPaths();
 ---
 <Base title={`${ui(lang, 'ui.about.title')} | LopezLab`} description={a.whatWeDo.text}>
@@ -54,8 +58,11 @@ export const getStaticPaths = () => langStaticPaths();
     <section class="block" id="clients">
       <h2 class="h-1">{sentenceCase(ui(lang, 'ui.home.who'))}</h2>
       <div>
-        <ul class="client-list">
-          {clientNames.map((n) => <li>{n}</li>)}
+        <ul class="client-wall">
+          {clientNames.map((n) => {
+            const svg = logoFor(n);
+            return <li>{svg ? <span class="logo" role="img" aria-label={n} set:html={svg} /> : <span class="name">{n}</span>}</li>;
+          })}
         </ul>
         <p class="text" style="margin-top:4rem"><a href={t('/contact/')}>{a.method.outro}</a></p>
       </div>
