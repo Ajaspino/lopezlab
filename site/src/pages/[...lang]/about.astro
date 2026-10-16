@@ -20,7 +20,7 @@ for (const g of a.method.clients) for (const n of g.names) {
 const clientNames = [...byKey.values()].map(pretty).sort((x, y) => x.localeCompare(y, lang, { sensitivity: 'base', ignorePunctuation: true }));
 // Logos en SVG de un solo color (currentColor: negro, y blanco en modo oscuro). Los clientes sin logo se muestran con su nombre.
 const logoFiles = import.meta.glob('../../assets/clients/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders', amstel: 'amstel', studioedelkoort: 'edelkoort', marteenbaas: 'baas', maartenbaas: 'baas', fairfood: 'fairfood', alizent: 'alizent', alboroque: 'alboroque', kikijoost: 'kiki', mariablaisse: 'blaisse', trendunion: 'trendunion', ccamsteltheater: 'ccamstel' };
+const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders', amstel: 'amstel', studioedelkoort: 'edelkoort', marteenbaas: 'baas', maartenbaas: 'baas', fairfood: 'fairfood', alizent: 'alizent', ostadeadam: 'ostade', alboroque: 'alboroque', kikijoost: 'kiki', mariablaisse: 'blaisse', trendunion: 'trendunion', ccamsteltheater: 'ccamstel' };
 const logoFor = (n: string) => { const f = logoByKey[norm(n)]; return f ? logoFiles[`../../assets/clients/${f}.svg`] : undefined; };
 export const getStaticPaths = () => langStaticPaths();
 ---
