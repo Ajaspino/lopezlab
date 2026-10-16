@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import Img from '../../../components/Img.astro';
-import { allProjects, accentOf, heroOf, projectsFor } from '../../../lib/images';
+import { allProjects, accentOf, heroOf, projectsFor, altFor } from '../../../lib/images';
 import { langFrom, hrefFor, langStaticPaths, ui } from '../../../lib/i18n';
 import { splitDashes } from '../../../lib/text';
 export function getStaticPaths() {
@@ -47,8 +47,8 @@ for (const r of rows) {
     <div class="story">
       {story.map((r, i) => {
         if (r.type === 'prose') return <div class="prose">{r.items.map((x: any) => { const d = splitDashes(x.html); return d ? <Fragment>{d.intro && <p set:html={d.intro} />}<ul class="dashes">{d.items.map((t) => <li set:html={t} />)}</ul></Fragment> : <p set:html={x.html} />; })}</div>;
-        if (r.type === 'pair') return <div class="pair">{r.items.map((b: any) => <figure class="fig"><Img file={b.file} alt={b.alt || ''} sizes="(min-width: 768px) 46vw, 100vw" widths={[480, 800, 1200, 1600]} /></figure>)}</div>;
-        if (r.type === 'image') return <figure class="fig"><Img file={r.file} alt={r.alt || ''} sizes="(min-width: 1440px) 1400px, 100vw" loading={i < 2 ? 'eager' : 'lazy'} /></figure>;
+        if (r.type === 'pair') return <div class="pair">{r.items.map((b: any) => <figure class="fig"><Img file={b.file} alt={altFor(b.file, lang) || b.alt || ''} sizes="(min-width: 768px) 46vw, 100vw" widths={[480, 800, 1200, 1600]} /></figure>)}</div>;
+        if (r.type === 'image') return <figure class="fig"><Img file={r.file} alt={altFor(r.file, lang) || r.alt || ''} sizes="(min-width: 1440px) 1400px, 100vw" loading={i < 2 ? 'eager' : 'lazy'} /></figure>;
         if (r.type === 'video') return <div class="video" style="--ratio:1218 / 720"><iframe src={`https://player.vimeo.com/video/${r.id}?background=1&autoplay=1&loop=1&muted=1&dnt=1`} title={r.title || `${p.title}, video`} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>;
         if (r.type === 'h') return <h2 class="h-2" set:html={r.html} />;
         if (r.type === 'ul' || r.type === 'ol') return <ul class="prose">{r.items.map((t: string) => <li set:html={t} />)}</ul>;

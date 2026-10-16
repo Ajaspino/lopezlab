@@ -7,7 +7,7 @@ const H = heading;
 const lang = langOfUrl(Astro.url);
 ---
 <a class="card" href={hrefFor(lang, `/project/${slug}/`)}>
-  <div class="ph" style={`view-transition-name: cover-${slug}`}><Img file={cover} alt={alt} sizes={sizes} /></div>
+  <div class="ph" style={`view-transition-name: cover-${slug}`}><Img small file={cover} alt={alt} sizes={sizes} /></div>
   <div class="cap">
     {label && <span class="label">{label}</span>}
     <H>{title}</H>

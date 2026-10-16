@@ -303,7 +303,7 @@ main { min-height: 60vh; }
     .method > *, .post-teaser a > *, .spotlight a > *,
     .about .block, .team > li, .clients > div,
     .article .head, .article .body > *,
-    .contact .mail-big, .contact .details,
+    .contact .mail-big, .contact .details, .cta > *,
     .credits, .pager {
       animation: reveal linear both;
       animation-timeline: view();
@@ -467,3 +467,7 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .pager-link .label { color: var(--muted); }
 .pager-link .title { font-size: 1rem; font-weight: 500; line-height: 1.3; text-wrap: balance; }
 .pager-link:hover { opacity: var(--dim); }
+
+/* Cierre de la home: llamada a escribir (texto de la página de contacto) */
+.cta { padding-block: var(--space-32) 0; display: grid; justify-items: center; gap: var(--space-6); text-align: center; }
+.cta h2 { font-size: var(--t-h1); font-weight: var(--w-head); line-height: 1.08; letter-spacing: -0.015em; max-width: 18ch; text-wrap: balance; }

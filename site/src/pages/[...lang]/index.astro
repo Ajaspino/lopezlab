@@ -10,7 +10,6 @@ const lang = langFrom(Astro.params.lang);
 const t = (p: string) => hrefFor(lang, p);
 const h = localize(pages, lang, 'pages').home;
 const projects = projectsFor(lang);
-const heroProject = projects.find((p) => p.slug === h.hero.link)!;
 const feature = projects.find((p) => p.slug === h.feature.slug)!;
 export const getStaticPaths = () => langStaticPaths();
 ---
@@ -18,7 +17,7 @@ export const getStaticPaths = () => langStaticPaths();
   <section class="hero wrap">
     <h1 class="h-display">{h.hero.title}</h1>
     <p class="sub">{h.hero.sub}</p>
-    <a class="shot" href={t(`/project/${h.hero.link}/`)} aria-label={heroProject.title}>
+    <a class="shot" href={t('/post/our-method/')} aria-label={h.method.cta}>
       <div class="ph"><Img file="hero-home.jpg" alt="" sizes="100vw" loading="eager" fetchpriority="high" widths={[480, 800, 1200, 1800, 2200]} position="50% 40%" /></div>
     </a>
   </section>
@@ -60,5 +59,10 @@ export const getStaticPaths = () => langStaticPaths();
 
   <section class="who wrap">
     <a href={t('/about/#clients')}>{sentenceCase(ui(lang, 'ui.home.who'))}</a>
+  </section>
+
+  <section class="cta wrap">
+    <h2>{ui(lang, 'ui.contact.intro')}</h2>
+    <a class="link-arrow" href={t('/contact/')}>{ui(lang, 'ui.nav.contact')}</a>
   </section>
 </Base>

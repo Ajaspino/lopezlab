@@ -16,6 +16,12 @@ import covers from '../data/covers.json';
 const coverFor = (slug: string, orig: string | null) => (covers as Record<string, string>)[slug] ?? orig;
 export const allProjects: Project[] = projects.map((p) => ({ ...p, cover: coverFor(p.slug, p.cover) }));
 export { coverFor };
+import altTexts from '../data/alt.json';
+/** Texto alternativo de una imagen de proyecto en el idioma pedido (inglés si falta; vacío si no hay) */
+export const altFor = (file: string | null | undefined, lang: string): string => {
+  const a = file ? (altTexts as Record<string, Record<string, string>>)[file] : undefined;
+  return a?.[lang] ?? a?.en ?? '';
+};
 import coverAlt from '../data/coverAlt.json';
 /** Portada anterior (la del listado antiguo), para el bloque destacado de la home cuando la tarjeta usa otra imagen */
 export const spotlightCover = (slug: string, fallback: string | null) => (coverAlt as Record<string, string>)[slug] ?? fallback;
