@@ -272,19 +272,7 @@ main { min-height: 60vh; }
 .story .prose > * + *, .article .body > * + * { margin-top: var(--space-4); }
 
 
-/* ---------- Selector de idioma ---------- */
 .head-right { display: flex; align-items: stretch; gap: clamp(var(--space-3), 4vw, var(--space-8)); }
-.lang { align-self: center; position: relative; font-size: 0.9375rem; font-weight: 500; }
-.lang summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4ch; min-height: 2.75rem; padding-inline: 0.25rem; }
-.lang summary::-webkit-details-marker { display: none; }
-.lang summary::after { content: ''; width: 0.5rem; height: 0.300rem; background: currentColor; clip-path: polygon(0.0% 16.7%, 10.0% 0.0%, 50.0% 66.7%, 90.0% 0.0%, 100.0% 16.7%, 50.0% 100.0%); transition: transform 160ms var(--ease); }
-.lang[open] summary::after { transform: scaleY(-1); }
-.lang ul { position: absolute; right: 0; top: 100%; z-index: 30; min-width: 11rem; margin: 0; padding: var(--space-2); list-style: none; background: var(--bg); color: var(--ink); border: 1px solid var(--ink); }
-.lang[data-up] ul { top: auto; bottom: 100%; left: 0; right: auto; }
-.lang li a { display: block; padding: var(--space-3) var(--space-3); text-decoration: none; font-weight: 500; }
-.lang li a:hover { background: var(--surface); }
-.lang li a[aria-current] { font-weight: 700; }
-.lang li a[aria-current]::after { content: ''; display: inline-block; width: 0.6rem; height: 0.427rem; margin-left: 0.8em; background: currentColor; clip-path: polygon(0.0% 45.9%, 9.6% 32.4%, 38.5% 73.0%, 90.4% 0.0%, 100.0% 13.5%, 38.5% 100.0%); }
 
 /* ---------- Movimiento ---------- */
 @media (prefers-reduced-motion: no-preference) {
@@ -354,14 +342,12 @@ main { min-height: 60vh; }
 :root { --dim: 0.4; --dim-ease: 0.3s ease-in-out; }
 
 /* Micro-etiquetas */
-.label, .meta, .cats, .nav, .filters, .lang, .site-footer h2, .details h2, .clients h3, .link-arrow, .project-head .label {
+.label, .meta, .cats, .nav, .filters, .site-footer h2, .details h2, .clients h3, .link-arrow, .project-head .label {
   text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--t-micro); font-weight: var(--w-label); line-height: 1.3;
 }
 .brand { font-weight: 600; letter-spacing: 0.1em; font-size: 0.75rem; }
 .nav { gap: clamp(var(--space-4), 4vw, var(--space-8)); }
 .nav a[aria-current] { font-weight: var(--w-label); }
-.lang { font-size: var(--t-micro); }
-.lang li a { font-size: var(--t-micro); }
 .filters { font-size: var(--t-micro); gap: var(--space-8); }
 .cats { font-size: var(--t-micro); }
 .cats a { text-decoration: none; }
@@ -405,7 +391,6 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .who a::after { transition: none; }
 .who a:hover::after { transform: none; }
 .site-footer a:hover { opacity: var(--dim); }
-.lang li a:hover { opacity: var(--dim); background: transparent; }
 
 /* Rejilla: recortes uniformes 16:9 y huecos pequeños */
 .card .ph { aspect-ratio: 16 / 9; }
@@ -440,11 +425,12 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .mobile-nav li { border-bottom: 1px solid var(--line); }
 .mobile-nav a { display: block; padding-block: 2.125rem; font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); text-decoration: none; transition: color 0.15s; }
 .mobile-nav a:hover { color: var(--muted); opacity: 1; }
-.menu-lang { display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; letter-spacing: 0.07em; text-transform: uppercase; }
-.menu-lang a { padding: 0.8rem 0.25rem; margin-inline: -0.25rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
-.menu-lang a:hover { color: var(--ink); opacity: 1; }
-.menu-lang a[aria-current] { color: var(--ink); font-weight: 700; }
-.menu-lang .sep { color: var(--line); }
+.lang-toggle { display: flex; align-self: center; align-items: center; gap: 0.25rem; font-size: 0.75rem; letter-spacing: 0.07em; text-transform: uppercase; }
+.lang-toggle a { padding: 0.8rem 0.25rem; margin-inline: -0.25rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.lang-toggle a:hover { color: var(--ink); opacity: 1; }
+.lang-toggle a[aria-current] { color: var(--ink); font-weight: 700; }
+.lang-toggle .sep { color: var(--line); }
+.menu-lang { align-self: flex-start; }
 @media (max-width: 767px) {
   .head-right { display: none; }
   .menu-toggle { display: flex; }

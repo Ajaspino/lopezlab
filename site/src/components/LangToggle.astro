@@ -1,0 +1,22 @@
+---
+// Idiomas en línea (EN / ES / GL / NL): activo en negrita y oscuro, el resto en gris, separados por una barra. Igual que la web de chenchu.
+import { LOCALES, LANG_NAMES, langOfUrl, switchPath, ui, LANG_PREF_KEY } from '../lib/i18n';
+interface Props { class?: string; }
+const { class: cls = '' } = Astro.props;
+const cur = langOfUrl(Astro.url);
+---
+<div class={`lang-toggle ${cls}`} role="group" aria-label={ui(cur, 'ui.footer.language')}>
+  {LOCALES.map((l, i) => (
+    <Fragment>
+      {i > 0 && <span class="sep" aria-hidden="true">/</span>}
+      <a href={switchPath(Astro.url, l)} hreflang={l} lang={l} aria-label={LANG_NAMES[l]} aria-current={l === cur ? 'true' : undefined}>{l}</a>
+    </Fragment>
+  ))}
+</div>
+<script is:inline define:vars={{ KEY: LANG_PREF_KEY }}>
+  // Recuerda la elección manual de idioma (a partir de entonces no se cambia solo según el navegador)
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('.lang-toggle a[hreflang]');
+    if (a) try { localStorage.setItem(KEY, a.getAttribute('hreflang')); } catch (err) {}
+  });
+</script>

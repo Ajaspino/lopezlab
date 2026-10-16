@@ -1,6 +1,6 @@
 ---
-import LangSwitch from './LangSwitch.astro';
-import { LOCALES, LANG_NAMES, langOfUrl, hrefFor, ui, stripBase, switchPath } from '../lib/i18n';
+import LangToggle from './LangToggle.astro';
+import { langOfUrl, hrefFor, ui, stripBase } from '../lib/i18n';
 const lang = langOfUrl(Astro.url);
 const path = stripBase(Astro.url.pathname).replace(new RegExp(`^/${lang}(?=/)`), '') || '/';
 const items = [[ui(lang, 'ui.nav.work'), '/work/'], [ui(lang, 'ui.nav.about'), '/about/'], [ui(lang, 'ui.nav.contact'), '/contact/']];
@@ -13,7 +13,7 @@ const current = (href: string) => path.startsWith(href) || (href === '/work/' &&
       <nav class="nav" aria-label={ui(lang, 'ui.nav.main')}>
         {items.map(([name, href]) => <a href={hrefFor(lang, href)} aria-current={current(href) ? 'page' : undefined}>{name}</a>)}
       </nav>
-      <LangSwitch class="lang-head" />
+      <LangToggle />
     </div>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"
       aria-label={ui(lang, 'ui.menu.open')} data-open={ui(lang, 'ui.menu.open')} data-close={ui(lang, 'ui.menu.close')}>
@@ -27,14 +27,7 @@ const current = (href: string) => path.startsWith(href) || (href === '/work/' &&
       {items.map(([name, href]) => <li><a href={hrefFor(lang, href)} aria-current={current(href) ? 'page' : undefined}>{name}</a></li>)}
     </ul>
   </nav>
-  <div class="menu-lang" role="group" aria-label={ui(lang, 'ui.footer.language')}>
-    {LOCALES.map((l, i) => (
-      <Fragment>
-        {i > 0 && <span class="sep" aria-hidden="true">/</span>}
-        <a href={switchPath(Astro.url, l)} hreflang={l} lang={l} aria-label={LANG_NAMES[l]} aria-current={l === lang ? 'true' : undefined}>{l}</a>
-      </Fragment>
-    ))}
-  </div>
+  <LangToggle class="menu-lang" />
 </div>
 <script>
   const toggle = document.getElementById('menu-toggle') as HTMLButtonElement | null;
