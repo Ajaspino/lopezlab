@@ -2,6 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import pages from '../../../data/pages.json';
 import { splitDashes } from '../../../lib/text';
+import Img from '../../../components/Img.astro';
 import { langFrom, hrefFor, langStaticPaths, localize } from '../../../lib/i18n';
 export function getStaticPaths() {
   return langStaticPaths(Object.entries(pages.posts).map(([slug, post]) => ({ params: { slug }, props: { post } })));
@@ -10,14 +11,20 @@ const lang = langFrom(Astro.params.lang);
 const t = (p: string) => hrefFor(lang, p);
 const post = localize(Astro.props.post, lang, `pages.posts.${Astro.params.slug}`);
 // Artículos con identidad propia: panel de color en la cabecera
-const PANEL = new Set(['clarity-is-a-strategy']);
-const styled = PANEL.has(Astro.params.slug as string);
+// Cada uno enlaza desde la home con su propio bloque: Clarity usa el gris del bloque de la home; Our method, la imagen de la portada
+const PANEL: Record<string, { image?: string; position?: string }> = {
+  'clarity-is-a-strategy': {},
+  'our-method': { image: 'hero-home.jpg', position: '50% 40%' },
+};
+const panel = PANEL[Astro.params.slug as string];
+const styled = !!panel;
 // Un párrafo que solo contiene un texto en negrita corto se trata como subtítulo
 const isHeading = (h: string) => /^<strong>[^<]{3,80}<\/strong>$/.test(h.trim()) && !/[.;:]$/.test(h.replace(/<[^>]+>/g, '').trim());
 ---
 <Base title={lang === 'en' ? post.metaTitle : `${post.title} | LopezLab`} description={post.metaDescription}>
   {styled && (
-    <header class="post-panel">
+    <header class={`post-panel${panel.image ? ' has-image' : ''}`}>
+      {panel.image && <div class="ph"><Img file={panel.image} alt="" sizes="100vw" loading="eager" fetchpriority="high" widths={[800, 1200, 1800, 2400]} position={panel.position} /></div>}
       <div class="wrap">
         <h1>{post.title}</h1>
         {post.sub && <p class="lead">{post.sub}</p>}
