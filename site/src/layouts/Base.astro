@@ -36,7 +36,8 @@ const autoTargets = AUTO_LANGUAGE && lang === 'en' && !noindex ? Object.fromEntr
     </script>}
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    <meta name="theme-color" content="#fcfcfc" />
+    <meta name="theme-color" content="#fcfcfc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f0f0f" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href={withBase('/favicon.ico')} sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />

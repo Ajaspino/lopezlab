@@ -9,6 +9,10 @@
   --line: oklch(0.88 0.005 260);
   --on-ink: oklch(0.98 0.002 260);
   --accent: var(--ink);
+  /* Superficie invertida (pie, menús sobre el pie): oscura en modo claro, ligeramente más clara que el fondo en modo oscuro */
+  --invert-bg: var(--ink);
+  --invert-fg: var(--on-ink);
+  color-scheme: light dark;
 
   --font: 'Schibsted Grotesk Variable', 'Helvetica Neue', Arial, sans-serif;
 
@@ -48,6 +52,23 @@
   --header-h: 3.75rem;
 }
 
+/* Modo oscuro: igual que la web de chenchu, sin botón; se activa si el sistema o el navegador lo tienen por defecto. Solo cambian las variables. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --ink: #f0f0f0;
+    --muted: #9a9a9a;
+    --line: #2c2c2c;
+    --on-ink: #0f0f0f;
+    --invert-bg: #1a1a1a;
+    --invert-fg: #f0f0f0;
+  }
+}
+/* Color de acento de proyecto para texto: en oscuro se aclara para mantener el contraste sobre el fondo */
+body { --accent-text: var(--accent); }
+@media (prefers-color-scheme: dark) { body { --accent-text: color-mix(in oklab, var(--accent) 45%, white); } }
+
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 1rem); }
 body {
@@ -70,7 +91,7 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em
 ::selection { background: var(--accent); color: #fff; }
 
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
-.invert :focus-visible { outline-color: var(--on-ink); }
+.invert :focus-visible { outline-color: var(--invert-fg); }
 
 .skip {
   position: absolute; left: var(--gutter); top: -4rem; z-index: 50;
@@ -92,7 +113,7 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em
 @media (min-width: 768px) { .brand { font-size: 1rem; } .nav { font-size: 1rem; } }
 
 /* ---------- Footer ---------- */
-.site-footer { margin-top: var(--space-32); background: var(--ink); color: var(--on-ink); padding-block: var(--space-16) var(--space-12); }
+.site-footer { margin-top: var(--space-32); background: var(--invert-bg); color: var(--invert-fg); padding-block: var(--space-16) var(--space-12); }
 .site-footer .cols { display: grid; gap: var(--space-8); }
 .site-footer h2 { font-size: var(--t-small); font-weight: 500; opacity: 0.75; letter-spacing: 0; margin-bottom: var(--space-2); }
 .site-footer p, .site-footer address { font-style: normal; font-size: 1.125rem; line-height: 1.45; }
@@ -187,7 +208,7 @@ main { min-height: 60vh; }
 
 /* ---------- Proyecto ---------- */
 .project-head { padding-block: var(--space-12) var(--space-8); display: grid; gap: var(--space-6); }
-.project-head .label { font-size: 1.0625rem; font-weight: 600; color: var(--accent); }
+.project-head .label { font-size: 1.0625rem; font-weight: 600; color: var(--accent-text); }
 .cats { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); list-style: none; padding: 0; margin: 0; font-size: var(--t-small); }
 .cats a { color: var(--muted); text-decoration-color: var(--line); }
 .cats a:hover { color: var(--ink); text-decoration-color: currentColor; }
@@ -268,7 +289,7 @@ main { min-height: 60vh; }
 .lang-head { display: none; }
 .lang-foot-h { display: block; }
 @media (min-width: 768px) { .lang-head { display: block; } .lang-foot, .lang-foot-h { display: none; } }
-.site-footer .lang ul { background: var(--ink); color: var(--on-ink); border-color: var(--on-ink); }
+.site-footer .lang ul { background: var(--invert-bg); color: var(--invert-fg); border-color: var(--invert-fg); }
 .site-footer .lang li a:hover { background: oklch(0.3 0.01 260); }
 .site-footer .lang summary { padding-inline: 0; font-size: 1.125rem; }
 
