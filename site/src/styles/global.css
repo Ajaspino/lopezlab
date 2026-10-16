@@ -458,7 +458,7 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .head-right .lang-toggle .sep { display: flex; align-items: center; color: var(--muted); opacity: 0.6; }
 
 /* ---------- Créditos y paginador de proyecto ---------- */
-.credits { margin: var(--space-16) auto 0; max-width: 36rem; padding-block: var(--space-6); border-block: 1px solid var(--line); text-align: center; }
+.credits { margin: var(--space-16) auto 0; max-width: 36rem; text-align: center; }
 .credits h2 { color: var(--muted); margin-bottom: var(--space-2); }
 .credits p { font-size: 0.9375rem; line-height: 1.6; overflow-wrap: anywhere; text-wrap: pretty; }
 .pager { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--line); }
