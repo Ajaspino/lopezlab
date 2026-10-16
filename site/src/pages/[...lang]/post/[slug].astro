@@ -9,13 +9,10 @@ export function getStaticPaths() {
 const lang = langFrom(Astro.params.lang);
 const t = (p: string) => hrefFor(lang, p);
 const post = localize(Astro.props.post, lang, `pages.posts.${Astro.params.slug}`);
-// Un párrafo que solo contiene un texto en negrita corto se trata como subtítulo
-// Artículos con identidad propia: panel de color en la cabecera, frases clave grandes y cierre en el mismo color
+// Artículos con identidad propia: panel de color en la cabecera
 const PANEL = new Set(['clarity-is-a-strategy']);
 const styled = PANEL.has(Astro.params.slug as string);
-// Frases clave que se muestran en grande: un bloque que es solo una frase (con negritas) o que empieza con una frase en negrita completa
-const isBig = (h: string) => /^Good communication/.test(h.replace(/<[^>]+>/g, '').trim());
-const splitLead = (h: string) => { const m = h.match(/^<strong>([^<]+[.;!?])<\/strong>\s*(.*)$/s); return m ? { big: m[1], rest: m[2] } : null; };
+// Un párrafo que solo contiene un texto en negrita corto se trata como subtítulo
 const isHeading = (h: string) => /^<strong>[^<]{3,80}<\/strong>$/.test(h.trim()) && !/[.;:]$/.test(h.replace(/<[^>]+>/g, '').trim());
 ---
 <Base title={lang === 'en' ? post.metaTitle : `${post.title} | LopezLab`} description={post.metaDescription}>
@@ -35,20 +32,11 @@ const isHeading = (h: string) => /^<strong>[^<]{3,80}<\/strong>$/.test(h.trim())
       </header>
     )}
     <div class="body">
-      {post.blocks.map((b, i) => {
-        if (styled && i === post.blocks.length - 1) return null;
+      {post.blocks.map((b) => {
         if (isHeading(b.html)) return <h2 set:html={b.html.replace(/<\/?strong>/g, '')} />;
-        if (styled && isBig(b.html)) return <p class="big" set:html={b.html.replace(/<\/?strong>/g, '')} />;
-        const lead = styled ? splitLead(b.html) : null;
-        if (lead) return <Fragment><p class="big">{lead.big}</p><p set:html={lead.rest} /></Fragment>;
         const d = splitDashes(b.html);
         return d ? <Fragment>{d.intro && <p set:html={d.intro} />}<ul class="dashes">{d.items.map((t) => <li set:html={t} />)}</ul></Fragment> : <p set:html={b.html} />;
       })}
     </div>
   </article>
-  {styled && (
-    <footer class="post-close">
-      <div class="wrap"><p set:html={post.blocks[post.blocks.length - 1].html.replace(/<\/?strong>/g, '')} /></div>
-    </footer>
-  )}
 </Base>
