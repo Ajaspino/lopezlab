@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { img, isGif } from '../lib/images';
+import { withBase } from '../lib/i18n';
 interface Props { file?: string | null; alt?: string; sizes?: string; widths?: number[]; loading?: 'lazy' | 'eager'; class?: string; position?: string; fetchpriority?: 'high' | 'low' | 'auto'; }
 const { file, alt = '', sizes = '100vw', widths = [480, 800, 1200, 1800], loading = 'lazy', class: cls, position, fetchpriority } = Astro.props;
 const m = img(file);
@@ -8,5 +9,5 @@ const stem = (file ?? '').replace(/\.gif$/i, '');
 const style = position ? `object-position:${position}` : undefined;
 ---
 {m && (isGif(file)
-  ? <video src={`/media/${stem}.mp4`} poster={`/media/${stem}.jpg`} width={m.width} height={m.height} autoplay loop muted playsinline preload="metadata" aria-label={alt || undefined} aria-hidden={alt ? undefined : 'true'} class={cls} style={style}></video>
+  ? <video src={withBase(`/media/${stem}.mp4`)} poster={withBase(`/media/${stem}.jpg`)} width={m.width} height={m.height} autoplay loop muted playsinline preload="metadata" aria-label={alt || undefined} aria-hidden={alt ? undefined : 'true'} class={cls} style={style}></video>
   : <Image src={m} alt={alt} widths={widths.filter((w) => w <= m.width + 400)} sizes={sizes} format="webp" quality={78} loading={loading} decoding="async" fetchpriority={fetchpriority} class={cls} style={style} />)}

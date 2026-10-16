@@ -1,8 +1,8 @@
 ---
 import LangSwitch from './LangSwitch.astro';
-import { langOfUrl, hrefFor, ui } from '../lib/i18n';
+import { langOfUrl, hrefFor, ui, stripBase } from '../lib/i18n';
 const lang = langOfUrl(Astro.url);
-const path = Astro.url.pathname.replace(new RegExp(`^/${lang}(?=/)`), '') || '/';
+const path = stripBase(Astro.url.pathname).replace(new RegExp(`^/${lang}(?=/)`), '') || '/';
 const items = [[ui(lang, 'ui.nav.work'), '/work/'], [ui(lang, 'ui.nav.about'), '/about/'], [ui(lang, 'ui.nav.contact'), '/contact/']];
 const current = (href: string) => path.startsWith(href) || (href === '/work/' && path.startsWith('/project/'));
 ---

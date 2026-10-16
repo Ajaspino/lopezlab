@@ -2,13 +2,15 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { langOfUrl, ui, LOCALES, switchPath, SITE_LIVE, TRANSLATIONS_INDEXABLE, SITE_URL } from '../lib/i18n';
+import { langOfUrl, ui, LOCALES, switchPath, SITE_LIVE, TRANSLATIONS_INDEXABLE, SITE_URL, withBase, AUTO_LANGUAGE, LANG_PREF_KEY } from '../lib/i18n';
 interface Props { title: string; description?: string; accent?: string; noindex?: boolean; }
 const { title, description, accent, noindex = false } = Astro.props;
 const lang = langOfUrl(Astro.url);
 const indexable = SITE_LIVE && !noindex && (lang === 'en' || TRANSLATIONS_INDEXABLE);
 const abs = (path: string) => new URL(path, SITE_URL).href;
 const canonical = abs(Astro.url.pathname);
+// Redirección por idioma del navegador: solo en páginas en inglés (no en la 404) y sin elección previa guardada
+const autoTargets = AUTO_LANGUAGE && lang === 'en' && !noindex ? Object.fromEntries(LOCALES.filter((l) => l !== 'en').map((l) => [l, switchPath(Astro.url, l)])) : null;
 ---
 <!doctype html>
 <html lang={lang}>
@@ -19,17 +21,30 @@ const canonical = abs(Astro.url.pathname);
     <link rel="canonical" href={canonical} />
     {indexable && TRANSLATIONS_INDEXABLE && LOCALES.map((l) => <link rel="alternate" hreflang={l} href={abs(switchPath(Astro.url, l))} />)}
     {indexable && TRANSLATIONS_INDEXABLE && <link rel="alternate" hreflang="x-default" href={abs(switchPath(Astro.url, 'en'))} />}
+    {autoTargets && <script is:inline define:vars={{ autoTargets, KEY: LANG_PREF_KEY }}>
+      (function () {
+        try {
+          if (localStorage.getItem(KEY)) return;
+          var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+          for (var i = 0; i < prefs.length; i++) {
+            var l = String(prefs[i]).toLowerCase().split('-')[0];
+            if (l === 'en') return;
+            if (autoTargets[l]) { location.replace(autoTargets[l]); return; }
+          }
+        } catch (e) {}
+      })();
+    </script>}
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <meta name="theme-color" content="#fcfcfc" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
     <meta property="og:site_name" content="Lopezlab" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={abs('/og-image.png')} />
+    <meta property="og:image" content={abs(withBase('/og-image.png'))} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
