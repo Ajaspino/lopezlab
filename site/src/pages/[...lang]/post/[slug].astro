@@ -2,10 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import pages from '../../../data/pages.json';
 import { splitDashes } from '../../../lib/text';
-import Img from '../../../components/Img.astro';
-import ProjectCard from '../../../components/ProjectCard.astro';
-import { langFrom, hrefFor, langStaticPaths, localize, ui } from '../../../lib/i18n';
-import { projectsFor, coverFor, heroOf, projectBySlug } from '../../../lib/images';
+import { langFrom, hrefFor, langStaticPaths, localize } from '../../../lib/i18n';
 export function getStaticPaths() {
   return langStaticPaths(Object.entries(pages.posts).map(([slug, post]) => ({ params: { slug }, props: { post } })));
 }
@@ -13,46 +10,45 @@ const lang = langFrom(Astro.params.lang);
 const t = (p: string) => hrefFor(lang, p);
 const post = localize(Astro.props.post, lang, `pages.posts.${Astro.params.slug}`);
 // Un párrafo que solo contiene un texto en negrita corto se trata como subtítulo
-// Artículos con cabecera de imagen a sangre (proyecto cuya imagen abre el artículo) y proyectos relacionados al final
-const FEATURE: Record<string, { hero: string; related: string[] }> = {
-  'clarity-is-a-strategy': { hero: 'regenerative-farming-framed', related: ['regenerative-farming-framed', 'the-work-of-listening', 'alizent'] },
-};
-const feat = FEATURE[Astro.params.slug as string];
-const heroProject = feat && projectBySlug(feat.hero);
-const related = feat ? projectsFor(lang).filter((p) => feat.related.includes(p.slug)).sort((a, b) => feat.related.indexOf(a.slug) - feat.related.indexOf(b.slug)) : [];
+// Artículos con identidad propia: panel de color en la cabecera, frases clave grandes y cierre en el mismo color
+const PANEL = new Set(['clarity-is-a-strategy']);
+const styled = PANEL.has(Astro.params.slug as string);
 // Frases clave que se muestran en grande: un bloque que es solo una frase (con negritas) o que empieza con una frase en negrita completa
-const isBig = (h: string) => /^Good communication|^Clarity is not only/.test(h.replace(/<[^>]+>/g, '').trim());
+const isBig = (h: string) => /^Good communication/.test(h.replace(/<[^>]+>/g, '').trim());
 const splitLead = (h: string) => { const m = h.match(/^<strong>([^<]+[.;!?])<\/strong>\s*(.*)$/s); return m ? { big: m[1], rest: m[2] } : null; };
 const isHeading = (h: string) => /^<strong>[^<]{3,80}<\/strong>$/.test(h.trim()) && !/[.;:]$/.test(h.replace(/<[^>]+>/g, '').trim());
 ---
 <Base title={lang === 'en' ? post.metaTitle : `${post.title} | LopezLab`} description={post.metaDescription}>
-  {heroProject && (
-    <header class="post-hero">
-      <div class="ph"><Img file={heroOf(heroProject)} alt="" sizes="100vw" loading="eager" fetchpriority="high" widths={[800, 1200, 1800, 2400]} /></div>
-      <div class="wrap"><h1>{post.title}</h1></div>
+  {styled && (
+    <header class="post-panel">
+      <div class="wrap">
+        <h1>{post.title}</h1>
+        {post.sub && <p class="lead">{post.sub}</p>}
+      </div>
     </header>
   )}
-  <article class={`wrap article${heroProject ? ' has-hero' : ''}`}>
-    <header class="head">
-      {!heroProject && <h1 class="h-1">{post.title}</h1>}
-      {post.sub && <p class="lead">{post.sub}</p>}
-    </header>
+  <article class={`wrap article${styled ? ' is-styled' : ''}`}>
+    {!styled && (
+      <header class="head">
+        <h1 class="h-1">{post.title}</h1>
+        {post.sub && <p class="lead">{post.sub}</p>}
+      </header>
+    )}
     <div class="body">
-      {post.blocks.map((b) => {
+      {post.blocks.map((b, i) => {
+        if (styled && i === post.blocks.length - 1) return null;
         if (isHeading(b.html)) return <h2 set:html={b.html.replace(/<\/?strong>/g, '')} />;
-        if (heroProject && isBig(b.html)) return <p class="big" set:html={b.html.replace(/<\/?strong>/g, '')} />;
-        const lead = heroProject ? splitLead(b.html) : null;
+        if (styled && isBig(b.html)) return <p class="big" set:html={b.html.replace(/<\/?strong>/g, '')} />;
+        const lead = styled ? splitLead(b.html) : null;
         if (lead) return <Fragment><p class="big">{lead.big}</p><p set:html={lead.rest} /></Fragment>;
         const d = splitDashes(b.html);
         return d ? <Fragment>{d.intro && <p set:html={d.intro} />}<ul class="dashes">{d.items.map((t) => <li set:html={t} />)}</ul></Fragment> : <p set:html={b.html} />;
       })}
     </div>
   </article>
-  {related.length > 0 && (
-    <section class="wrap post-related" aria-label={ui(lang, 'ui.work.selected')}>
-      <ul class="feed">
-        {related.map((p) => <li><ProjectCard slug={p.slug} title={p.title} label={p.label} cover={coverFor(p.slug, p.cover)} alt="" /></li>)}
-      </ul>
-    </section>
+  {styled && (
+    <footer class="post-close">
+      <div class="wrap"><p set:html={post.blocks[post.blocks.length - 1].html.replace(/<\/?strong>/g, '')} /></div>
+    </footer>
   )}
 </Base>

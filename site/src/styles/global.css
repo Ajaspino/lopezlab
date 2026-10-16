@@ -477,16 +477,19 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 @media (min-width: 640px) { .client-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 1100px) { .client-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-10, 4rem) var(--space-8); } }
 
-/* Artículo con imagen a sangre: titular sobre la imagen, frases clave en grande y proyectos relacionados */
-.post-hero { position: relative; display: grid; width: 100%; grid-template-columns: minmax(0, 1fr); color: #fff; }
-.post-hero > * { grid-area: 1 / 1; }
-.post-hero .ph { width: 100%; height: clamp(26rem, 78svh, 44rem); }
-.post-hero .ph::after { content: ''; position: absolute; inset: 0; background: rgb(0 0 0 / 0.38); }
-.post-hero .wrap { align-self: end; padding-bottom: var(--space-8); position: relative; z-index: 1; }
-.post-hero h1 { font-size: clamp(2.75rem, 11vw, 7rem); line-height: 0.98; font-weight: var(--w-head); letter-spacing: -0.02em; max-width: 12ch; text-wrap: balance; }
-@media (min-width: 900px) { .post-hero .ph { height: clamp(28rem, 72svh, 46rem); } .post-hero .wrap { padding-bottom: var(--space-12); } }
-.article.has-hero { padding-top: var(--space-12); gap: var(--space-12); }
-.article.has-hero .body { gap: var(--space-6); max-width: 46rem; }
+/* Artículo con identidad propia: panel de color arriba y cierre en el mismo color, frases clave grandes entre párrafos */
+:root { --post-bg: oklch(0.84 0.012 85); --post-ink: oklch(0.2 0.01 85); }
+@media (prefers-color-scheme: dark) { :root { --post-bg: oklch(0.3 0.012 85); --post-ink: oklch(0.95 0.005 85); } }
+.post-panel, .post-close { background: var(--post-bg); color: var(--post-ink); }
+.post-panel { padding-block: var(--space-16) var(--space-12); }
+.post-panel .wrap { display: grid; gap: var(--space-8); }
+.post-panel h1 { font-size: clamp(2.75rem, 10vw, 7rem); line-height: 0.98; font-weight: var(--w-head); letter-spacing: -0.02em; text-wrap: balance; max-width: 14ch; }
+.post-panel .lead { max-width: 30ch; font-size: clamp(1.375rem, 3.2vw, 2rem); line-height: 1.25; }
+@media (min-width: 900px) { .post-panel { padding-block: var(--space-24, 6rem) var(--space-16); } }
+.article.is-styled { padding-top: var(--space-16); padding-bottom: var(--space-16); gap: 0; }
+.article.is-styled .body { gap: var(--space-6); max-width: 46rem; }
 .article .body .big { font-size: clamp(1.75rem, 5vw, 3rem); line-height: 1.1; font-weight: var(--w-card); letter-spacing: -0.01em; margin-block: var(--space-8); max-width: 20ch; text-wrap: balance; }
-.article.has-hero .dashes { font-size: clamp(1.25rem, 3vw, 1.75rem); line-height: 1.25; gap: var(--space-3); }
-.post-related { margin-top: var(--space-16, 5rem); }
+.article.is-styled .dashes { font-size: clamp(1.25rem, 3vw, 1.75rem); line-height: 1.25; gap: var(--space-3); }
+.post-close { padding-block: var(--space-16); }
+.post-close p { font-size: clamp(1.75rem, 5vw, 3rem); line-height: 1.12; font-weight: var(--w-card); letter-spacing: -0.01em; max-width: 24ch; text-wrap: balance; }
+@media (min-width: 900px) { .post-close { padding-block: var(--space-24, 6rem); } }
