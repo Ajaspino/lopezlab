@@ -14,9 +14,9 @@
   },
   "feature": {
    "words": [
-    "regenerative",
-    "FARMING",
-    "framed"
+    "Regenerative",
+    "Farming",
+    "Framed"
    ],
    "sub": "Kloosterplaats: Better decisions through clarity.",
    "slug": "regenerative-farming-framed"
@@ -32,7 +32,7 @@
    {
     "slug": "bob-piedo",
     "label": "Cancer Centre Amsterdam",
-    "title": "Making Cancer Research Accesible",
+    "title": "Making Cancer Research Accessible",
     "cover": "blog__92__images___mini__work_listado__608__12-bob-pinedo.jpg",
     "alt": "Bob pinedo"
    },
@@ -166,7 +166,7 @@
       "Flamenco Biënnale",
       "kiki+joost",
       "maria blaisse",
-      "marteen baas",
+      "maarten baas",
       "ostade A'dam",
       "Studio Edelkoort"
      ]

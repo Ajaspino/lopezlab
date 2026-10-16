@@ -23,7 +23,7 @@ for (const [n] of logoOnly) if (!byKey.has(norm(n))) byKey.set(norm(n), n);
 const clientNames = [...byKey.values()].map(pretty).sort((x, y) => x.localeCompare(y, lang, { sensitivity: 'base', ignorePunctuation: true }));
 // Logos en SVG de un solo color (currentColor: negro, y blanco en modo oscuro). Los clientes sin logo se muestran con su nombre.
 const logoFiles = import.meta.glob('../../assets/clients/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders', amstel: 'amstel', studioedelkoort: 'edelkoort', marteenbaas: 'baas', maartenbaas: 'baas', fairfood: 'fairfood', alizent: 'alizent', ostadeadam: 'ostade', alboroque: 'alboroque', kikijoost: 'kiki', mariablaisse: 'blaisse', trendunion: 'trendunion', ccamsteltheater: 'ccamstel' };
+const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders', amstel: 'amstel', studioedelkoort: 'edelkoort', maartenbaas: 'baas', fairfood: 'fairfood', alizent: 'alizent', ostadeadam: 'ostade', alboroque: 'alboroque', kikijoost: 'kiki', mariablaisse: 'blaisse', trendunion: 'trendunion', ccamsteltheater: 'ccamstel' };
 for (const [n, f] of logoOnly) logoByKey[norm(n)] = f;
 // Área base (rem²) y ajustes por logo para los de trazo fino o con mucho aire.
 const AREA = 20;
