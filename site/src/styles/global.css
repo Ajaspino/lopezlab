@@ -118,7 +118,7 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em
 .site-footer h2 { font-size: var(--t-small); font-weight: 500; opacity: 0.75; letter-spacing: 0; margin-bottom: var(--space-2); }
 .site-footer p, .site-footer address { font-style: normal; font-size: 1.125rem; line-height: 1.45; }
 .site-footer a { text-underline-offset: 0.25em; }
-.site-footer .big { font-size: var(--t-h2); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; display: inline-block; margin-top: var(--space-1); word-break: break-word; }
+.site-footer .big { font-size: 1.125rem; font-weight: 700; line-height: 1.45; letter-spacing: 0; display: inline-block; word-break: break-word; } /* mismo tamaño que el resto del pie */
 @media (min-width: 768px) { .site-footer .cols { grid-template-columns: 1.4fr 1fr 1fr; gap: var(--space-12); } }
 
 /* ---------- Page scaffolding ---------- */
@@ -355,7 +355,7 @@ main { min-height: 60vh; }
 .method p { font-weight: 450; letter-spacing: -0.005em; }
 .spotlight .words { font-weight: var(--w-head); letter-spacing: -0.03em; }
 .post-teaser h2 { font-weight: var(--w-head); }
-.site-footer .big { font-weight: var(--w-head); }
+.site-footer .big { font-weight: var(--w-light); }
 .site-footer p, .site-footer address, .details p, .details address { font-weight: var(--w-light); }
 .team h3, .article .body h2 { font-weight: var(--w-card); }
 .clients ul { font-weight: var(--w-light); }
