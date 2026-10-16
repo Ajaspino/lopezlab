@@ -1,0 +1,19 @@
+---
+import { LOCALES, LANG_NAMES, langOfUrl, switchPath } from '../lib/i18n';
+interface Props { class?: string; up?: boolean; }
+const { class: cls = '', up = false } = Astro.props;
+const cur = langOfUrl(Astro.url);
+---
+<details class={`lang ${cls}`} data-up={up || undefined}>
+  <summary aria-label={`Language: ${LANG_NAMES[cur]}`}><span aria-hidden="true">{cur.toUpperCase()}</span></summary>
+  <ul>
+    {LOCALES.map((l) => (
+      <li><a href={switchPath(Astro.url, l)} hreflang={l} lang={l} aria-current={l === cur ? 'true' : undefined}>{LANG_NAMES[l]}</a></li>
+    ))}
+  </ul>
+</details>
+<script>
+  // Cierra el selector al pulsar fuera o con Escape
+  document.addEventListener('click', (e) => document.querySelectorAll<HTMLDetailsElement>('details.lang[open]').forEach((d) => { if (!d.contains(e.target as Node)) d.open = false; }));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.querySelectorAll<HTMLDetailsElement>('details.lang[open]').forEach((d) => { d.open = false; (d.querySelector('summary') as HTMLElement).focus(); }); });
+</script>

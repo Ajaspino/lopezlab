@@ -1,0 +1,27 @@
+---
+import LangSwitch from './LangSwitch.astro';
+import { langOfUrl, ui } from '../lib/i18n';
+const lang = langOfUrl(Astro.url);
+---
+<footer class="site-footer invert">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h2>{ui(lang, 'ui.footer.mail')}</h2>
+        <a class="big" href="mailto:hello@lopezlab.com">hello@lopezlab.com</a>
+      </div>
+      <div>
+        <h2>{ui(lang, 'ui.footer.visit')}</h2>
+        <address>Sint Pieterspoortsteeg 23b<br />1012 HM Amsterdam NL</address>
+        <h2 style="margin-top:1.5rem">{ui(lang, 'ui.footer.call')}</h2>
+        <p><a href="tel:+31644205667">+31 6 4420 5667</a></p>
+      </div>
+      <div>
+        <h2>{ui(lang, 'ui.footer.follow')}</h2>
+        <p><a href="https://www.linkedin.com/in/mariola-lópez-mariño-745a9011/" rel="noopener">Linkedin</a><br /><a href="https://www.instagram.com/lopezlab.design/" rel="noopener">Instagram</a></p>
+        <h2 class="lang-foot-h" style="margin-top:1.5rem">{ui(lang, 'ui.footer.language')}</h2>
+        <LangSwitch class="lang-foot" up />
+      </div>
+    </div>
+  </div>
+</footer>

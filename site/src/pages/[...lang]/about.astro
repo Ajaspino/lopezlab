@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import Img from '../../components/Img.astro';
+import pages from '../../data/pages.json';
+import { langFrom, hrefFor, langStaticPaths, localize, ui } from '../../lib/i18n';
+const lang = langFrom(Astro.params.lang);
+const t = (p: string) => hrefFor(lang, p);
+const a = localize(pages, lang, 'pages').about;
+import { sentenceCase } from '../../lib/text';
+// "Name of client" es un marcador de plantilla que quedó publicado; se omite
+const clients = a.method.clients.map((g) => ({ ...g, names: g.names.filter((n) => n !== 'Name of client') }));
+export const getStaticPaths = () => langStaticPaths();
+---
+<Base title={`${ui(lang, 'ui.about.title')} | LopezLab`} description={a.whatWeDo.text}>
+  <div class="wrap about">
+    <section class="block">
+      <h1 class="h-1">{a.whatWeDo.title}</h1>
+      <p class="text">{a.whatWeDo.text}</p>
+    </section>
+
+    <section class="block">
+      <h2 class="h-1">{a.whoWeAre.title}</h2>
+      <div>
+        <p class="text">{a.whoWeAre.text}</p>
+        <ul class="team">
+          {a.team.map((m) => (
+            <li>
+              <div class="ph"><Img file={m.photo} alt={m.alt} sizes="(min-width: 640px) 30vw, 100vw" widths={[400, 640, 900]} /></div>
+              <h3>{m.name}</h3>
+              <p>{m.role}</p>
+              <p><a href={`mailto:${m.email}`}>{m.email}</a></p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="block" id="method">
+      <h2 class="h-1">{sentenceCase(a.method.title)}</h2>
+      <div>
+        <p class="text">{a.method.text}</p>
+        <div class="clients" id="clients">
+          {clients.map((g) => (
+            <div>
+              <h3>{g.sector}</h3>
+              <ul>{g.names.map((n) => <li>{n}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+        <p class="text" style="margin-top:3rem"><a href={t('/contact/')}>{a.method.outro}</a></p>
+      </div>
+    </section>
+  </div>
+</Base>

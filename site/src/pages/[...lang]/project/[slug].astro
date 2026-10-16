@@ -1,0 +1,63 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Img from '../../../components/Img.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { allProjects, accentOf, heroOf, projectsFor } from '../../../lib/images';
+import { langFrom, hrefFor, langStaticPaths, ui } from '../../../lib/i18n';
+import { splitDashes } from '../../../lib/text';
+export function getStaticPaths() {
+  return langStaticPaths(allProjects.map((p, i) => ({ params: { slug: p.slug }, props: { p, next: allProjects[(i + 1) % allProjects.length] } })));
+}
+const lang = langFrom(Astro.params.lang);
+const t = (p: string) => hrefFor(lang, p);
+const L = projectsFor(lang);
+const idx = L.findIndex((x) => x.slug === Astro.props.p.slug);
+const p = L[idx];
+const next = L[(idx + 1) % L.length];
+
+// Agrupa imágenes consecutivas: dos verticales seguidas van en pareja; el resto a ancho completo
+const portrait = (b: any) => b?.type === 'image' && !!b.w && !!b.h && b.h > b.w * 1.1;
+const rows: any[] = [];
+for (let i = 0; i < p.blocks.length; i++) {
+  const b: any = p.blocks[i];
+  if (portrait(b) && portrait(p.blocks[i + 1])) { rows.push({ type: 'pair', items: [b, p.blocks[i + 1]] }); i++; }
+  else rows.push(b);
+}
+// Párrafos consecutivos se agrupan en un solo bloque de prosa
+const story: any[] = [];
+for (const r of rows) {
+  const last = story[story.length - 1];
+  if (r.type === 'p' && last?.type === 'prose') last.items.push(r);
+  else if (r.type === 'p') story.push({ type: 'prose', items: [r] });
+  else story.push(r);
+}
+---
+<Base title={lang === 'en' ? p.metaTitle : `${p.title} | LopezLab`} description={p.lead} accent={accentOf(p.slug)}>
+  <article class="wrap">
+    <header class="project-head">
+      {p.label && <p class="label">{p.label}</p>}
+      <h1 class="h-1" style="max-width:20ch">{p.title}</h1>
+      {p.categories.length > 0 && <ul class="cats">{p.categories.map((c) => <li><a href={t(`/work/${c.slug}/`)}>{c.name}</a></li>)}</ul>}
+    </header>
+
+    {heroOf(p) && <div class="project-hero ph" style={`view-transition-name: cover-${p.slug}`}><Img file={heroOf(p)} alt="" sizes="(min-width: 1440px) 1380px, 100vw" loading="eager" fetchpriority="high" widths={[480, 800, 1200, 1800, 2400]} /></div>}
+    {p.lead && <p class="lead project-lead">{p.lead}</p>}
+
+    <div class="story">
+      {story.map((r, i) => {
+        if (r.type === 'prose') return <div class="prose">{r.items.map((x: any) => { const d = splitDashes(x.html); return d ? <Fragment>{d.intro && <p set:html={d.intro} />}<ul class="dashes">{d.items.map((t) => <li set:html={t} />)}</ul></Fragment> : <p set:html={x.html} />; })}</div>;
+        if (r.type === 'pair') return <div class="pair">{r.items.map((b: any) => <figure class="fig"><Img file={b.file} alt={b.alt || ''} sizes="(min-width: 768px) 46vw, 100vw" widths={[480, 800, 1200, 1600]} /></figure>)}</div>;
+        if (r.type === 'image') return <figure class="fig"><Img file={r.file} alt={r.alt || ''} sizes="(min-width: 1440px) 1400px, 100vw" loading={i < 2 ? 'eager' : 'lazy'} /></figure>;
+        if (r.type === 'video') return <div class="video" style="--ratio:1218 / 720"><iframe src={`https://player.vimeo.com/video/${r.id}?background=1&autoplay=1&loop=1&muted=1&dnt=1`} title={r.title || `${p.title}, video`} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>;
+        if (r.type === 'h') return <h2 class="h-2" set:html={r.html} />;
+        if (r.type === 'ul' || r.type === 'ol') return <ul class="prose">{r.items.map((t: string) => <li set:html={t} />)}</ul>;
+        return null;
+      })}
+    </div>
+
+    <nav class="next" aria-label={ui(lang, 'ui.project.nextAria')}>
+      <p class="meta" style="margin-bottom:1rem">{ui(lang, 'ui.project.next')}</p>
+      <ProjectCard slug={next.slug} title={next.title} label={next.label} cover={next.cover} heading="h2" />
+    </nav>
+  </article>
+</Base>

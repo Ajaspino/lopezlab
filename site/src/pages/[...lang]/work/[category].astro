@@ -1,0 +1,36 @@
+---
+import Base from '../../../layouts/Base.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { allCategories, projectsFor, categoriesFor } from '../../../lib/images';
+export function getStaticPaths() {
+  return langStaticPaths(allCategories().map((c) => ({ params: { category: c.slug }, props: { cat: c } })));
+}
+import { langFrom, hrefFor, langStaticPaths, ui } from '../../../lib/i18n';
+const lang = langFrom(Astro.params.lang);
+const t = (p: string) => hrefFor(lang, p);
+const slug = Astro.props.cat.slug;
+const cats = categoriesFor(lang);
+const cat = cats.find((c) => c.slug === slug)!;
+const list = projectsFor(lang).filter((p) => p.categories.some((c) => c.slug === slug));
+---
+<Base title={`${cat.name} | ${ui(lang, 'ui.work.title')} | LopezLab`}>
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="h-display">{cat.name}</h1>
+      <div class="toolbar">
+        <ul class="filters" aria-label={ui(lang, 'ui.work.filter')}>
+        <li><a href={t('/work/')}>{ui(lang, 'ui.work.all')}</a></li>
+        {cats.map((c) => <li><a href={t(`/work/${c.slug}/`)} aria-current={c.slug === cat.slug ? 'page' : undefined}>{c.name}</a></li>)}
+      </ul>
+      </div>
+    </div>
+    <ul class="feed">
+      {list.map((p) => <li><ProjectCard slug={p.slug} title={p.title} label={p.label} cover={p.cover} heading="h2" /></li>)}
+    </ul>
+  </div>
+</Base>
+
+<script>
+  // Deja visible la pestaña activa cuando la barra se desplaza
+  document.querySelector('.filters [aria-current]')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+</script>

@@ -1,0 +1,19 @@
+---
+import LangSwitch from './LangSwitch.astro';
+import { langOfUrl, hrefFor, ui } from '../lib/i18n';
+const lang = langOfUrl(Astro.url);
+const path = Astro.url.pathname.replace(new RegExp(`^/${lang}(?=/)`), '') || '/';
+const items = [[ui(lang, 'ui.nav.work'), '/work/'], [ui(lang, 'ui.nav.about'), '/about/'], [ui(lang, 'ui.nav.contact'), '/contact/']];
+const current = (href: string) => path.startsWith(href) || (href === '/work/' && path.startsWith('/project/'));
+---
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href={hrefFor(lang, '/')}>Lopezlab Amsterdam.</a>
+    <div class="head-right">
+      <nav class="nav" aria-label={ui(lang, 'ui.nav.main')}>
+        {items.map(([name, href]) => <a href={hrefFor(lang, href)} aria-current={current(href) ? 'page' : undefined}>{name}</a>)}
+      </nav>
+      <LangSwitch class="lang-head" />
+    </div>
+  </div>
+</header>

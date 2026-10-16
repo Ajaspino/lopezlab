@@ -1,0 +1,271 @@
+{
+ "home": {
+  "metaTitle": "Graphic Design Company – Amsterdam | LopezLab",
+  "metaDescription": "Lopezlab is a brand consultancy and design company located in Amsterdam.",
+  "hero": {
+   "title": "PITCHING & STRATEGIC COMMUNICATION",
+   "sub": "Clear stories for complex ideas.",
+   "image": "edicion__EDC-0041___mini__container__hero-image-4.jpg",
+   "link": "this-is-not-flamenco"
+  },
+  "method": {
+   "text": "Clarity, structure and storytelling for teams that need to persuade, align or secure funding.",
+   "cta": "Explore our method"
+  },
+  "feature": {
+   "words": [
+    "regenerative",
+    "FARMING",
+    "framed"
+   ],
+   "sub": "Kloosterplaats: Better decisions through clarity.",
+   "slug": "regenerative-farming-framed"
+  },
+  "featured": [
+   {
+    "slug": "the-work-of-listening",
+    "label": "Politie Amsterdam",
+    "title": "Visual strategy for civil dialogue",
+    "cover": "blog__160__images___mini__work_listado__679__politie-2.jpg",
+    "alt": "Visual strategy for civil dialogue"
+   },
+   {
+    "slug": "bob-piedo",
+    "label": "Cancer Centre Amsterdam",
+    "title": "Making Cancer Research Accesible",
+    "cover": "blog__92__images___mini__work_listado__608__12-bob-pinedo.jpg",
+    "alt": "Bob pinedo"
+   },
+   {
+    "slug": "een-thuis-voor-asr",
+    "label": "a.s.r.",
+    "title": "Shaping a shared corporate identity",
+    "cover": "blog__113__images___mini__work_listado__678__asr-huis-4.jpg",
+    "alt": "Shaping a shared corporate identity"
+   },
+   {
+    "slug": "ontspannen-nederland",
+    "label": "Naar een ontspannen Nederland",
+    "title": "Communication for systemic transition",
+    "cover": "blog__136__images___mini__work_listado__681__ontspanne-enderland-2.jpg",
+    "alt": "Communication for systemic transition"
+   },
+   {
+    "slug": "good-farming-different-ways",
+    "label": "College van Rijksadviseurs",
+    "title": "Visualizing agricultural inclusiveness",
+    "cover": "blog__130__images___mini__work_listado__683__boer-doet-leven-2.jpg",
+    "alt": "Visualizing agricultural inclusiveness"
+   }
+  ],
+  "postTeaser": {
+   "title": "Clarity is a strategy",
+   "sub": "Complex topics don’t need louder messages; they need sharper ones. Lopezlab helps organisations turn complexity into structured, persuasive communication. From pitches and policy work to publications and digital platforms.",
+   "cta": "Read post"
+  },
+  "more": [
+   {
+    "slug": "uxua-rethinking-luxury",
+    "label": "Uxua",
+    "title": "Rethinking Luxury",
+    "cover": "blog__169__images___mini__work_listado__684__uxua-3.jpg",
+    "alt": "Uxua. Rethinking Luxury"
+   },
+   {
+    "slug": "regenerative-farming-framed",
+    "label": "Kloosterplaats Farm",
+    "title": "Building a Case for Funding",
+    "cover": "blog__156__images___mini__work_listado__685__kloosterplaats.jpg",
+    "alt": "Regenerative Farming Framed"
+   },
+   {
+    "slug": "alizent",
+    "label": "Alizent",
+    "title": "A fresh look at automation",
+    "cover": "blog__81__images___mini__work_listado__693__alizent-2.jpg",
+    "alt": "A brand system for automation and mobility"
+   },
+   {
+    "slug": "cc-amstel-corporate-identity",
+    "label": "CC Amstel",
+    "title": "Bold brand for a cultural hub",
+    "cover": "blog__112__images___mini__work_listado__691__cc-amstel-2.jpg",
+    "alt": "Bold brand for a cultural hub"
+   }
+  ],
+  "rawTail": "WHO WE WORK WITH"
+ },
+ "about": {
+  "metaTitle": "About | LopezLab",
+  "whatWeDo": {
+   "title": "What we do",
+   "text": "Lopezlab is a strategic communication and design studio based in Amsterdam led by Mariola Lopez Mariño. We help organisations communicate with clarity, structure and purpose. From pitch decks and institutional storytelling to cultural, corporate and sustainability projects. We work across culture, the environmental sector, public institutions and business, translating ideas and data into strong narratives and precise visual systems, with a solid track record in high-stakes communication that helps teams move from ambiguity to alignment."
+  },
+  "whoWeAre": {
+   "title": "Who we are",
+   "text": "Lopezlab is led by Mariola Lopez Mariño, a designer and strategic communicator who works at the intersection of content and visual design, bringing clarity and structure to projects with complexity, sensitivity or high stakes. We collaborate with a small core group, including designers André Grobbée and Claudia Lasarte, and supported by senior specialists in research, writing, strategy, design and digital work assembled as needed, a flexible model that keeps the work sharp, efficient and aligned with each project’s demands."
+  },
+  "team": [
+   {
+    "name": "Mariola Lopez Mariño",
+    "role": "Founder",
+    "email": "mariola@lopezlab.com",
+    "photo": "blog__38__images___mini__team_listado__647__mariola-2.jpg",
+    "alt": "Mariola Lopez Mariño"
+   },
+   {
+    "name": "Claudia Lasarte",
+    "role": "Designer",
+    "email": "claudia@lopezlab.com",
+    "photo": "blog__143__images___mini__team_listado__641__claudia.jpg",
+    "alt": "Claudia Lasarte"
+   },
+   {
+    "name": "Andre Grobbe",
+    "role": "Digital media designer",
+    "email": "andre@lopezlab.com",
+    "photo": "blog__144__images___mini__team_listado__642__andre-developer.jpg",
+    "alt": "Andre Grobbe"
+   }
+  ],
+  "method": {
+   "title": "OUR METHOD",
+   "text": "Our method is grounded in understanding, structuring and shaping: we clarify the context, define what matters and organise content into a coherent narrative, then translate it into a precise visual system that supports persuasion, alignment and visibility, a process built on asking the right questions, removing noise and making decisions readable. Meet here some of the organisations that have trusted us with this work.",
+   "clients": [
+    {
+     "sector": "Green & Sustainability",
+     "names": [
+      "Flamenco Biënnale",
+      "Trend Union"
+     ]
+    },
+    {
+     "sector": "Health & Care",
+     "names": [
+      "A.S.R.",
+      "Esero",
+      "Ferring"
+     ]
+    },
+    {
+     "sector": "Brands & Corporate",
+     "names": [
+      "Alboroque",
+      "Alizent",
+      "Amstel",
+      "asr",
+      "Esero",
+      "Name of client",
+      "Xolvio"
+     ]
+    },
+    {
+     "sector": "Culture & Society",
+     "names": [
+      "CC Amstel theater",
+      "Flamenco Biënnale",
+      "kiki+joost",
+      "maria blaisse",
+      "marteen baas",
+      "ostade A'dam",
+      "Studio Edelkoort"
+     ]
+    },
+    {
+     "sector": "Public Institutions & Policy",
+     "names": [
+      "Arriva",
+      "Fair food",
+      "Marcel Wanders"
+     ]
+    }
+   ],
+   "outro": "If you’d like to know more about our method or receive a curated selection of recent work, feel free to reach out."
+  }
+ },
+ "contact": {
+  "metaTitle": "Contact | LopezLab",
+  "text": "Ready to get started? We are here for you. Say hi!\nFull name*\nEmail address*\nPhone\nHow can we help you?\nVisit\nSint Pieterspoortsteeg 23b\n1012 HM Amsterdam NL\nCall\nT\n+31 6 4420 5667\nM\n+31 (6) 442 05 667\nMail\nhello@lopezlab.com"
+ },
+ "posts": {
+  "our-method": {
+   "title": "Our Method",
+   "sub": "A practical framework to turn complex ideas into structured, persuasive communication.",
+   "blocks": [
+    {
+     "html": "Every project begins with a simple question: <strong>what is the real message, and what needs to happen with it?</strong>"
+    },
+    {
+     "html": "Most organisations have strong ideas, but the way those ideas are communicated often gets lost in internal complexity, competing perspectives or unclear priorities. Our method brings structure, clarity and purpose to that process."
+    },
+    {
+     "html": "We begin by identifying the environment in which the communication needs to operate:<br/>– who needs to understand the message<br/>– what they need to do with it<br/>– what sensitivities, expectations or constraints exist<br/>– what outcomes the organisation depends on"
+    },
+    {
+     "html": "This step defines the logic of the project."
+    },
+    {
+     "html": "We turn scattered information into a coherent framework.<br/>This includes identifying core ideas, removing noise, and defining the narrative architecture that will support decision-making, persuasion or alignment."
+    },
+    {
+     "html": "A strong structure is the foundation for any clear story."
+    },
+    {
+     "html": "Once the logic is defined, we develop the narrative:<br/>– what is said first<br/>– what is emphasised<br/>– how complexity becomes understandable<br/>– how evidence, data and lived experiences support the message<br/>– how to convey nuance without losing clarity"
+    },
+    {
+     "html": "The goal is to build a story that is both precise and engaging."
+    },
+    {
+     "html": "The final step is giving form to the message. Depending on the project, this can be:<br/>– a pitch deck<br/>– a presentation for stakeholders<br/>– a publication<br/>– a policy document<br/>– a website or online platform<br/>– a communication toolkit<br/>– a campaign for public dialogue"
+    },
+    {
+     "html": "Visual strategy, tone of voice and communication logic work together to make the message land with the intended audience."
+    },
+    {
+     "html": "For pitches, presentations or sensitive communication, we help teams refine:<br/>– how the message is delivered<br/>– how to speak to decision-makers<br/>– how to handle difficult questions<br/>– how to maintain clarity under pressure"
+    },
+    {
+     "html": "Because even the best narrative needs confident delivery."
+    },
+    {
+     "html": "This process is not linear: it adapts to the needs of the project, the sector and the level of complexity. Whether a team needs to persuade funders, align partners or communicate sensitive issues, our method brings structure, precision and confidence to ideas that matter."
+    }
+   ],
+   "metaTitle": "Our Method — Lopezlab | LopezLab",
+   "metaDescription": "Lopezlab’s method turns complex ideas into clear, structured and persuasive communication for teams working in sensitive or strategic contexts."
+  },
+  "clarity-is-a-strategy": {
+   "title": "Clarity is a strategy",
+   "sub": "Complex topics don’t need louder messages; they need sharper ones. Lopezlab helps organisations turn complexity into structured, persuasive communication. From pitches and policy work to publications and digital platforms.",
+   "blocks": [
+    {
+     "html": "Most organisations operate in environments where information is dense, stakes are high and audiences vary widely. Many teams have strong ideas or meaningful work, yet struggle to communicate it in a way that <strong>persuades</strong> <strong>funders</strong>, <strong>aligns stakeholders</strong>, or <strong>engages the public</strong>."
+    },
+    {
+     "html": "<strong>Clarity is not decoration; it is a strategic tool.</strong> At Lopezlab, I focus on<strong> structuring ideas</strong>, <strong>shaping narratives</strong> and<strong> building communication logic</strong> that allows messages to land with precision. This involves:"
+    },
+    {
+     "html": "– identifying what truly matters<br/>– reducing noise without losing nuance<br/>– creating frameworks that connect facts, emotions and audience needs<br/>– turning scattered information into arguments that move people"
+    },
+    {
+     "html": "Good communication isn’t about simplifying content. It’s about making it <strong>understandable</strong>, <strong>trustworthy</strong> and <strong>usable</strong>."
+    },
+    {
+     "html": "This approach is especially relevant for organisations dealing with complex or sensitive topics. Including environmental transitions, public institutions, health and care, community work, and projects that require clear framing for partners, stakeholders or funders. But its relevance extends far beyond any single sector. Any organisation that needs to explain impact, justify decisions or navigate public perception benefits from clarity."
+    },
+    {
+     "html": "Through <strong>PitchLab</strong>, I work with teams to develop narratives that help them:"
+    },
+    {
+     "html": "– persuade decision-makers<br/>– clarify value and long-term vision<br/>– communicate sensitive issues with precision<br/>– build alignment inside and outside the organisation"
+    },
+    {
+     "html": "Clarity is not only a craft, it is a form of strategy. One that helps organisations <strong>speak with confidence</strong>, <strong>act with coherence</strong> and <strong>be understood</strong> where it matters."
+    }
+   ],
+   "metaTitle": "Clarity Is a Strategy — Lopezlab | LopezLab",
+   "metaDescription": "Clarity is a strategic tool. Lopezlab helps organisations turn complex or sensitive topics into clear, persuasive communication."
+  }
+ }
+}

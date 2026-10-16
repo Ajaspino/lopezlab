@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import Img from '../../components/Img.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import pages from '../../data/pages.json';
+import { accentOf, projectsFor, coverFor, spotlightCover } from '../../lib/images';
+import { sentenceCase } from '../../lib/text';
+import { langFrom, hrefFor, langStaticPaths, localize, ui } from '../../lib/i18n';
+const lang = langFrom(Astro.params.lang);
+const t = (p: string) => hrefFor(lang, p);
+const h = localize(pages, lang, 'pages').home;
+const projects = projectsFor(lang);
+const heroProject = projects.find((p) => p.slug === h.hero.link)!;
+const feature = projects.find((p) => p.slug === h.feature.slug)!;
+export const getStaticPaths = () => langStaticPaths();
+---
+<Base title={`${ui(lang, 'ui.home.title')} | LopezLab`} description={h.method.text}>
+  <section class="hero wrap">
+    <h1 class="h-display">{h.hero.title}</h1>
+    <p class="sub">{h.hero.sub}</p>
+    <a class="shot" href={t(`/project/${h.hero.link}/`)} aria-label={heroProject.title}>
+      <div class="ph"><Img file="hero-home.jpg" alt="" sizes="100vw" loading="eager" fetchpriority="high" widths={[480, 800, 1200, 1800, 2200]} position="50% 40%" /></div>
+    </a>
+  </section>
+
+  <section class="method wrap">
+    <p>{h.method.text}</p>
+    <a class="link-arrow" href={t('/post/our-method/')}>{h.method.cta}</a>
+  </section>
+
+  <section class="spotlight" style={`--accent:${accentOf(feature.slug)}`}>
+    <div class="wrap">
+      <a href={t(`/project/${feature.slug}/`)}>
+        <div>
+          <h2 class="words">{h.feature.words.map((w) => <span>{w}</span>)}</h2>
+          <p class="sub">{h.feature.sub}</p>
+        </div>
+        <div class="ph"><Img file={spotlightCover(feature.slug, feature.cover)} alt="" sizes="(min-width: 900px) 40vw, 100vw" /></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-label={ui(lang, 'ui.work.selected')}>
+    <ul class="feed">
+      {[...h.featured, ...h.more].map((c) => <li><ProjectCard slug={c.slug} title={c.title} label={c.label} cover={coverFor(c.slug, c.cover)} alt={c.alt} /></li>)}
+    </ul>
+  </section>
+
+  <section class="post-teaser">
+    <div class="wrap">
+      <a href={t('/post/clarity-is-a-strategy/')}>
+        <h2>{h.postTeaser.title}</h2>
+        <div>
+          <p>{h.postTeaser.sub}</p>
+          <span class="link-arrow">{h.postTeaser.cta}</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="who wrap">
+    <a href={t('/about/#clients')}>{sentenceCase(ui(lang, 'ui.home.who'))}</a>
+  </section>
+</Base>

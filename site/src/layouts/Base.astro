@@ -1,0 +1,44 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { langOfUrl, ui, LOCALES, switchPath, SITE_LIVE, TRANSLATIONS_INDEXABLE, SITE_URL } from '../lib/i18n';
+interface Props { title: string; description?: string; accent?: string; noindex?: boolean; }
+const { title, description, accent, noindex = false } = Astro.props;
+const lang = langOfUrl(Astro.url);
+const indexable = SITE_LIVE && !noindex && (lang === 'en' || TRANSLATIONS_INDEXABLE);
+const abs = (path: string) => new URL(path, SITE_URL).href;
+const canonical = abs(Astro.url.pathname);
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {!indexable && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    {indexable && TRANSLATIONS_INDEXABLE && LOCALES.map((l) => <link rel="alternate" hreflang={l} href={abs(switchPath(Astro.url, l))} />)}
+    {indexable && TRANSLATIONS_INDEXABLE && <link rel="alternate" hreflang="x-default" href={abs(switchPath(Astro.url, 'en'))} />}
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <meta name="theme-color" content="#fcfcfc" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:site_name" content="Lopezlab" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={abs('/og-image.png')} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {description && <meta property="og:description" content={description} />}
+  </head>
+  <body style={accent ? `--accent:${accent}` : undefined}>
+    <a class="skip" href="#main">{ui(lang, 'ui.skip')}</a>
+    <Header />
+    <main id="main"><slot /></main>
+    <Footer />
+  </body>
+</html>

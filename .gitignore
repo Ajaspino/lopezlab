@@ -1,0 +1,20 @@
+# Dependencias y builds
+node_modules/
+site/node_modules/
+site/dist/
+site/.astro/
+.astro/
+
+# Material de la web antigua (HTML original con claves y 175 MB de originales; las imágenes que usa la web están en site/src/assets)
+_crawl/
+
+# Entorno local
+.DS_Store
+.claude/
+.env
+.env.*
+*.log
+
+# Trozos intermedios de traducción (el resultado final está en site/src/data/i18n y TRADUCCIONES/)
+_i18n/*.chunk_*.json
+_i18n/chunk_*.json

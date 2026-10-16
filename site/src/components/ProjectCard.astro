@@ -1,0 +1,15 @@
+---
+import Img from './Img.astro';
+import { langOfUrl, hrefFor } from '../lib/i18n';
+interface Props { slug: string; title: string; label?: string; cover?: string | null; alt?: string; sizes?: string; heading?: 'h2' | 'h3'; }
+const { slug, title, label, cover, alt = '', sizes = '(min-width: 1024px) 31vw, (min-width: 640px) 48vw, 100vw', heading = 'h3' } = Astro.props;
+const H = heading;
+const lang = langOfUrl(Astro.url);
+---
+<a class="card" href={hrefFor(lang, `/project/${slug}/`)}>
+  <div class="ph" style={`view-transition-name: cover-${slug}`}><Img file={cover} alt={alt} sizes={sizes} /></div>
+  <div class="cap">
+    {label && <span class="label">{label}</span>}
+    <H>{title}</H>
+  </div>
+</a>

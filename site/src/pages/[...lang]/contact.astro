@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import { langFrom, hrefFor, langStaticPaths, ui } from '../../lib/i18n';
+const lang = langFrom(Astro.params.lang);
+const t = (p: string) => hrefFor(lang, p);
+export const getStaticPaths = () => langStaticPaths();
+---
+<Base title={`${ui(lang, 'ui.contact.titleTag')} | LopezLab`} description={ui(lang, 'ui.contact.intro')}>
+  <div class="wrap contact">
+    <h1 class="intro">{ui(lang, 'ui.contact.intro')}</h1>
+
+    <p class="mail-big">
+      <span class="label">{ui(lang, 'ui.contact.mail')}</span>
+      <a href="mailto:hello@lopezlab.com">hello@lopezlab.com</a>
+    </p>
+
+    <div class="details">
+      <div>
+        <h2>{ui(lang, 'ui.contact.visit')}</h2>
+        <address>Sint Pieterspoortsteeg 23b<br />1012 HM Amsterdam NL</address>
+      </div>
+      <div>
+        <h2>{ui(lang, 'ui.contact.call')}</h2>
+        <p>T <a href="tel:+31644205667">+31 6 4420 5667</a></p>
+        <p>M <a href="tel:+31644205667">+31 (6) 442 05 667</a></p>
+      </div>
+    </div>
+  </div>
+</Base>

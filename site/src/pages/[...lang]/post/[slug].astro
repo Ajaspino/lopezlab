@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import pages from '../../../data/pages.json';
+import { splitDashes } from '../../../lib/text';
+import { langFrom, hrefFor, langStaticPaths, localize } from '../../../lib/i18n';
+export function getStaticPaths() {
+  return langStaticPaths(Object.entries(pages.posts).map(([slug, post]) => ({ params: { slug }, props: { post } })));
+}
+const lang = langFrom(Astro.params.lang);
+const t = (p: string) => hrefFor(lang, p);
+const post = localize(Astro.props.post, lang, `pages.posts.${Astro.params.slug}`);
+// Un párrafo que solo contiene un texto en negrita corto se trata como subtítulo
+const isHeading = (h: string) => /^<strong>[^<]{3,80}<\/strong>$/.test(h.trim()) && !/[.;:]$/.test(h.replace(/<[^>]+>/g, '').trim());
+---
+<Base title={lang === 'en' ? post.metaTitle : `${post.title} | LopezLab`} description={post.metaDescription}>
+  <article class="wrap article">
+    <header class="head">
+      <h1 class="h-1">{post.title}</h1>
+      {post.sub && <p class="lead">{post.sub}</p>}
+    </header>
+    <div class="body">
+      {post.blocks.map((b) => { if (isHeading(b.html)) return <h2 set:html={b.html.replace(/<\/?strong>/g, '')} />; const d = splitDashes(b.html); return d ? <Fragment>{d.intro && <p set:html={d.intro} />}<ul class="dashes">{d.items.map((t) => <li set:html={t} />)}</ul></Fragment> : <p set:html={b.html} />; })}
+    </div>
+  </article>
+</Base>
