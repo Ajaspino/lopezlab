@@ -1,6 +1,6 @@
 # Lopezlab web
 
-Rediseño de lopezlab.com con [Astro](https://astro.build). Mobile-first, textos literales de la web original, solo inglés por ahora (rutas `/es`, `/gl` y `/nl` preparadas con el inglés como respaldo).
+Rediseño de lopezlab.com. Mobile-first, textos literales de la web original, solo inglés por ahora (rutas `/es`, `/gl` y `/nl` preparadas con el inglés como respaldo).
 
 ## Arranque
 
