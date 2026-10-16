@@ -25,6 +25,9 @@ const clientNames = [...byKey.values()].map(pretty).sort((x, y) => x.localeCompa
 const logoFiles = import.meta.glob('../../assets/clients/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders', amstel: 'amstel', studioedelkoort: 'edelkoort', marteenbaas: 'baas', maartenbaas: 'baas', fairfood: 'fairfood', alizent: 'alizent', ostadeadam: 'ostade', alboroque: 'alboroque', kikijoost: 'kiki', mariablaisse: 'blaisse', trendunion: 'trendunion', ccamsteltheater: 'ccamstel' };
 for (const [n, f] of logoOnly) logoByKey[norm(n)] = f;
+// Área base (rem²) y ajustes por logo para los de trazo fino o con mucho aire.
+const AREA = 20;
+const BOOST: Record<string, number> = { 'Kiki+Joost': 1.5, Ferring: 1.5, Esero: 1.4, 'Ministerie van Landbouw, Natuur en Voedselkwaliteit': 1.9, Heineken: 1.3, 'Radboud University': 1.5, 'Museum Het Valkhof': 1.3, 'Marcel Wanders': 1.2, 'Flamenco Biënnale': 1.2, 'Van Gogh Museum': 1.2, 'Trend Union': 1.2 };
 const logoFor = (n: string) => { const f = logoByKey[norm(n)]; return f ? logoFiles[`../../assets/clients/${f}.svg`] : undefined; };
 export const getStaticPaths = () => langStaticPaths();
 ---
@@ -66,8 +69,10 @@ export const getStaticPaths = () => langStaticPaths();
           {clientNames.map((n) => {
             const svg = logoFor(n);
             const vb = svg?.match(/viewBox="[\d.\s-]*?([\d.]+)\s+([\d.]+)"/);
-            const tall = vb ? Number(vb[1]) / Number(vb[2]) < 1.3 : false;
-            return <li>{svg ? <span class:list={['logo', { tall }]} role="img" aria-label={n} set:html={svg} /> : <span class="name">{n}</span>}</li>;
+            const ratio = vb ? Number(vb[1]) / Number(vb[2]) : 1;
+            // Área óptica constante: ancho = √(área × proporción), con tope para que ninguno domine.
+            const w = Math.min(11, Math.max(3.2, Math.sqrt(AREA * ratio * (BOOST[n] ?? 1)))).toFixed(2);
+            return <li>{svg ? <span class="logo" role="img" aria-label={`${n}`} style={`--w:${w}rem`} set:html={svg} /> : <span class="name">{n}</span>}</li>;
           })}
         </ul>
         <p class="text" style="margin-top:4rem"><a href={t('/contact/')}>{a.method.outro}</a></p>
