@@ -17,10 +17,14 @@ for (const g of a.method.clients) for (const n of g.names) {
   const k = norm(n), cur = byKey.get(k);
   if (!cur || (cur === cur.toLowerCase() && n !== n.toLowerCase())) byKey.set(k, n);   // si hay dos grafías, gana la que lleva mayúsculas
 }
+// Clientes de la web antigua que solo aparecían como logo (no en la lista de texto): nombre y archivo del logo.
+const logoOnly: [string, string][] = [['Heineken', 'heineken'], ['Vogels', 'vogels'], ['Air Liquide', 'airliquide'], ['de Volkskrant', 'volkskrant'], ['VUmc', 'vumc'], ['Piet Hein Eek', 'pietheineek'], ['Ministerie van Landbouw, Natuur en Voedselkwaliteit', 'lnv'], ['NEMO', 'nemo'], ['Stichting Ansicht', 'ansicht'], ['Radboud University', 'radboud'], ['Van Gogh Museum', 'vangogh'], ['Museum Het Valkhof', 'valkhof'], ['MoBA', 'moba'], ['RotaForm', 'rotaform']];
+for (const [n] of logoOnly) if (!byKey.has(norm(n))) byKey.set(norm(n), n);
 const clientNames = [...byKey.values()].map(pretty).sort((x, y) => x.localeCompare(y, lang, { sensitivity: 'base', ignorePunctuation: true }));
 // Logos en SVG de un solo color (currentColor: negro, y blanco en modo oscuro). Los clientes sin logo se muestran con su nombre.
 const logoFiles = import.meta.glob('../../assets/clients/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders', amstel: 'amstel', studioedelkoort: 'edelkoort', marteenbaas: 'baas', maartenbaas: 'baas', fairfood: 'fairfood', alizent: 'alizent', ostadeadam: 'ostade', alboroque: 'alboroque', kikijoost: 'kiki', mariablaisse: 'blaisse', trendunion: 'trendunion', ccamsteltheater: 'ccamstel' };
+for (const [n, f] of logoOnly) logoByKey[norm(n)] = f;
 const logoFor = (n: string) => { const f = logoByKey[norm(n)]; return f ? logoFiles[`../../assets/clients/${f}.svg`] : undefined; };
 export const getStaticPaths = () => langStaticPaths();
 ---
