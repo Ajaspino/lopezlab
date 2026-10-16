@@ -56,3 +56,40 @@ Contexto: Lopezlab es un estudio de comunicación estratégica y diseño en Áms
 Si una cadena es una etiqueta de disciplina («Narrative strategy», «Editorial design», «Corporate communication»…), tradúcela con naturalidad usando el glosario. Si es el nombre de un cliente u organización, déjala igual.
 
 Cuando dudes de un término, elige la opción más habitual en el sector del diseño y la comunicación y mantén la misma en todo el archivo.
+
+---
+
+## Créditos de proyecto (cadenas de `chunk_credits.json`)
+Cada cadena es la línea de créditos de un proyecto: pares «rol: nombre» separados por « / ». Ejemplo:
+`client: <a href="...">Xolvio</a> / photography: Nombre Apellido / concept & design: Lopezlab Amsterdam, Mariola Lopez Mariño`
+
+Reglas específicas:
+- **Se traduce solo la palabra del rol** (antes de los dos puntos y las descripciones de función). **Nombres de personas, empresas, instituciones y marcas no se tocan**, tampoco `Lopezlab Amsterdam`.
+- Conserva exactamente los separadores « / », las etiquetas `<a href="...">…</a>` (con su enlace) y las entidades (`&amp;`).
+- Mantén el estilo del original: roles en minúscula salvo que ya estén en mayúscula. Si el original mezcla neerlandés («ontwerp»), traduce al idioma de destino igualmente.
+- Si un rol es un cargo o título inusual (p. ej. «head marcom», «picture editing») tradúcelo con naturalidad según el sector o déjalo en inglés si es el término habitual.
+- Si hay dudas sobre un nombre propio de organización con traducción oficial (p. ej. «Board of Government Advisors, The Netherlands (College van Rijksadviseurs)»), mantén el nombre oficial neerlandés y traduce solo la glosa en inglés si procede.
+
+Glosario de roles (usa siempre estas equivalencias):
+| English | Español | Galego | Nederlands |
+|---|---|---|---|
+| client | cliente | cliente | opdrachtgever |
+| concept | concepto | concepto | concept |
+| concept & design | concepto y diseño | concepto e deseño | concept & ontwerp |
+| design | diseño | deseño | ontwerp |
+| art direction | dirección de arte | dirección de arte | art direction |
+| photography | fotografía | fotografía | fotografie |
+| illustration(s) | ilustración / ilustraciones | ilustración / ilustracións | illustratie(s) |
+| text(s) / texts | texto / textos | texto / textos | tekst(en) |
+| editor | edición | edición | redactie |
+| editorial direction | dirección editorial | dirección editorial | eindredactie |
+| production | producción | produción | productie |
+| publisher | editorial (editor) | editorial | uitgever |
+| project management | gestión del proyecto | xestión do proxecto | projectleiding |
+| website development | desarrollo web | desenvolvemento web | webontwikkeling |
+| animation | animación | animación | animatie |
+| film | vídeo | vídeo | film |
+| translation | traducción | tradución | vertaling |
+| author | autoría | autoría | auteur |
+| initiators | impulsores | impulsores | initiatiefnemers |
+| narrative strategy / content strategy | estrategia narrativa / de contenidos | estratexia narrativa / de contidos | narratieve strategie / contentstrategie |

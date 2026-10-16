@@ -1,7 +1,6 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import Img from '../../../components/Img.astro';
-import ProjectCard from '../../../components/ProjectCard.astro';
 import { allProjects, accentOf, heroOf, projectsFor } from '../../../lib/images';
 import { langFrom, hrefFor, langStaticPaths, ui } from '../../../lib/i18n';
 import { splitDashes } from '../../../lib/text';
@@ -13,7 +12,9 @@ const t = (p: string) => hrefFor(lang, p);
 const L = projectsFor(lang);
 const idx = L.findIndex((x) => x.slug === Astro.props.p.slug);
 const p = L[idx];
-const next = L[(idx + 1) % L.length];
+const prev = idx > 0 ? L[idx - 1] : null;               // el primero no tiene anterior
+const next = idx < L.length - 1 ? L[idx + 1] : null;   // el último no tiene siguiente
+const creditsHtml = p.credits ? p.credits.replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ') : '';
 
 // Agrupa imágenes consecutivas: dos verticales seguidas van en pareja; el resto a ancho completo
 const portrait = (b: any) => b?.type === 'image' && !!b.w && !!b.h && b.h > b.w * 1.1;
@@ -55,9 +56,18 @@ for (const r of rows) {
       })}
     </div>
 
-    <nav class="next" aria-label={ui(lang, 'ui.project.nextAria')}>
-      <p class="meta" style="margin-bottom:1rem">{ui(lang, 'ui.project.next')}</p>
-      <ProjectCard slug={next.slug} title={next.title} label={next.label} cover={next.cover} heading="h2" />
-    </nav>
+    {creditsHtml && (
+      <section class="credits" aria-labelledby="credits-title">
+        <h2 id="credits-title" class="label">{ui(lang, 'ui.project.credits')}</h2>
+        <p set:html={creditsHtml} />
+      </section>
+    )}
+
+    {(prev || next) && (
+      <nav class="pager" aria-label={ui(lang, 'ui.project.nextAria')}>
+        {prev ? <a class="pager-link prev" href={t(`/project/${prev.slug}/`)} rel="prev"><span class="label">{ui(lang, 'ui.project.prev')}</span><span class="title">{prev.title}</span></a> : <span />}
+        {next ? <a class="pager-link next" href={t(`/project/${next.slug}/`)} rel="next"><span class="label">{ui(lang, 'ui.project.next')}</span><span class="title">{next.title}</span></a> : <span />}
+      </nav>
+    )}
   </article>
 </Base>

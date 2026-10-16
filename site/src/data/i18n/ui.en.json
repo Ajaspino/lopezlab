@@ -14,8 +14,8 @@
  "ui.work.all": "All",
  "ui.work.filter": "Filter by category",
  "ui.work.selected": "Selected work",
- "ui.project.next": "Next project",
- "ui.project.nextAria": "Next project",
+ "ui.project.next": "Next",
+ "ui.project.nextAria": "Previous and next project",
  "ui.home.who": "WHO WE WORK WITH",
  "ui.contact.intro": "Ready to get started? We are here for you. Say hi!",
  "ui.contact.mail": "Mail",
@@ -25,5 +25,7 @@
  "ui.about.title": "About",
  "ui.home.title": "Pitching & Strategic Communication",
  "ui.menu.open": "Open menu",
- "ui.menu.close": "Close menu"
+ "ui.menu.close": "Close menu",
+ "ui.project.prev": "Previous",
+ "ui.project.credits": "Credits"
 }

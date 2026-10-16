@@ -53,9 +53,20 @@ for f in sorted(glob.glob(f'{H}/en__project__*.html')):
                 if vid: blocks.append({'type':'video','id':vid.group(1),'title':v.get('title','')})
             for i in el.find_all('img'): blocks.append({'type':'image','file':fname(i['src']),'w':num(i.get('width')),'h':num(i.get('height')),'alt':i.get('alt','')})
             if el.name=='blockquote' and clean(el.get_text()): blocks.append({'type':'quote','html':inner(el)})
+    # Créditos: bloque final "Credits:" (post-bottom). Se conserva el texto tal cual, con sus enlaces.
+    credits = ''
+    pb = s.select_one('.post-bottom')
+    if pb:
+        tit = next((t for t in pb.select('span.bot-tit') if clean(t.get_text()).lower().startswith('credits')), None)
+        body = tit.find_next_sibling('span') if tit else None
+        if body:
+            ps = body.find_all('p')
+            parts = [inner(x) for x in ps] if ps else [inner(body)]
+            credits = '<br/>'.join(x for x in parts if x and clean(re.sub(r'<[^>]+>', ' ', x)))
+    if credits.lower().strip(' .') in ('yet to know', 'tbc', 'tba'): credits = ''   # marcador de plantilla sin rellenar en el original
     c = cards.get(slug, {})
     cover = c.get('cover') or next((b['file'] for b in blocks if b['type']=='image' and not b['file'].endswith('.gif')), None)  # sin portada en el listado: primera imagen del cuerpo
-    projects.append({'slug':slug,'title':clean(h1.get_text()),'label':c.get('label',''),'cover':cover,'categories':cats,'lead':clean(sub.get_text()) if sub else '','blocks':blocks,'listed':slug in cards,'metaTitle':s.title.get_text(strip=True)})
+    projects.append({'slug':slug,'title':clean(h1.get_text()),'label':c.get('label',''),'cover':cover,'categories':cats,'lead':clean(sub.get_text()) if sub else '','credits':credits,'blocks':blocks,'listed':slug in cards,'metaTitle':s.title.get_text(strip=True)})
 print('tags', dict(tags)); print(len(projects),'proyectos', sum(p['listed'] for p in projects),'en listado')
 order = list(cards)   # orden del listado
 projects.sort(key=lambda p: order.index(p['slug']) if p['slug'] in order else 999)
