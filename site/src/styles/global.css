@@ -468,11 +468,12 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 @media (min-width: 480px) { .client-list { columns: 2; } }
 @media (min-width: 1100px) { .client-list { columns: 3; } }
 
-/* Clientes: rejilla sin líneas; cada logo se escala para ocupar un área óptica parecida (--w se calcula en about.astro) */
-.client-wall { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8) var(--space-6); }
-.client-wall li { display: flex; align-items: center; justify-content: center; min-height: 5.5rem; }
+/* Clientes: rejilla con filetes finos; cada logo se escala para ocupar un área óptica parecida (--w se calcula en about.astro) */
+.client-wall { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.client-wall li { display: flex; align-items: center; justify-content: center; min-height: 7rem; padding: 1.5rem 1.25rem; border-bottom: 1px solid var(--line); }
+.client-wall li:nth-child(odd) { border-right: 1px solid var(--line); }
 .client-wall .logo { display: flex; align-items: center; justify-content: center; width: 100%; }
 .client-wall .logo svg { display: block; width: var(--w); height: auto; max-width: 82%; max-height: 4.5rem; }
 .client-wall .name { font-size: 1.0625rem; font-weight: var(--w-card); text-align: center; }
-@media (min-width: 640px) { .client-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (min-width: 1100px) { .client-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-10, 4rem) var(--space-8); } }
+@media (min-width: 640px) { .client-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } .client-wall li:nth-child(odd) { border-right: 0; } .client-wall li:not(:nth-child(3n)) { border-right: 1px solid var(--line); } }
+@media (min-width: 1100px) { .client-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); } .client-wall li:not(:nth-child(3n)) { border-right: 0; } .client-wall li:not(:nth-child(4n)) { border-right: 1px solid var(--line); } }
