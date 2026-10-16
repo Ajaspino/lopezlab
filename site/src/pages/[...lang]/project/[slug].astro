@@ -4,6 +4,7 @@ import Img from '../../../components/Img.astro';
 import { allProjects, accentOf, heroOf, projectsFor, altFor } from '../../../lib/images';
 import { langFrom, hrefFor, langStaticPaths, ui } from '../../../lib/i18n';
 import { splitDashes } from '../../../lib/text';
+import vimeo from '../../../data/vimeo.json';
 export function getStaticPaths() {
   return langStaticPaths(allProjects.map((p, i) => ({ params: { slug: p.slug }, props: { p, next: allProjects[(i + 1) % allProjects.length] } })));
 }
@@ -18,10 +19,13 @@ const creditsHtml = p.credits ? p.credits.replace(/<a /g, '<a target="_blank" re
 
 // Agrupa imágenes consecutivas: dos verticales seguidas van en pareja; el resto a ancho completo
 const portrait = (b: any) => b?.type === 'image' && !!b.w && !!b.h && b.h > b.w * 1.1;
+// El original repite algunos vídeos de Vimeo dentro de la misma página: se muestra solo la primera vez
+const seenVideos = new Set<string>();
+const blocks: any[] = p.blocks.filter((b: any) => b.type !== 'video' || (seenVideos.has(b.id) ? false : (seenVideos.add(b.id), true)));
 const rows: any[] = [];
-for (let i = 0; i < p.blocks.length; i++) {
-  const b: any = p.blocks[i];
-  if (portrait(b) && portrait(p.blocks[i + 1])) { rows.push({ type: 'pair', items: [b, p.blocks[i + 1]] }); i++; }
+for (let i = 0; i < blocks.length; i++) {
+  const b: any = blocks[i];
+  if (portrait(b) && portrait(blocks[i + 1])) { rows.push({ type: 'pair', items: [b, blocks[i + 1]] }); i++; }
   else rows.push(b);
 }
 // Párrafos consecutivos se agrupan en un solo bloque de prosa
@@ -49,7 +53,7 @@ for (const r of rows) {
         if (r.type === 'prose') return <div class="prose">{r.items.map((x: any) => { const d = splitDashes(x.html); return d ? <Fragment>{d.intro && <p set:html={d.intro} />}<ul class="dashes">{d.items.map((t) => <li set:html={t} />)}</ul></Fragment> : <p set:html={x.html} />; })}</div>;
         if (r.type === 'pair') return <div class="pair">{r.items.map((b: any) => <figure class="fig"><Img file={b.file} alt={altFor(b.file, lang) || b.alt || ''} sizes="(min-width: 768px) 46vw, 100vw" widths={[480, 800, 1200, 1600]} /></figure>)}</div>;
         if (r.type === 'image') return <figure class="fig"><Img file={r.file} alt={altFor(r.file, lang) || r.alt || ''} sizes="(min-width: 1440px) 1400px, 100vw" loading={i < 2 ? 'eager' : 'lazy'} /></figure>;
-        if (r.type === 'video') return <div class="video" style="--ratio:1218 / 720"><iframe src={`https://player.vimeo.com/video/${r.id}?background=1&autoplay=1&loop=1&muted=1&dnt=1`} title={r.title || `${p.title}, video`} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>;
+        if (r.type === 'video') return <div class="video" style={`--ratio:${(vimeo as any)[r.id] ? `${(vimeo as any)[r.id].w} / ${(vimeo as any)[r.id].h}` : '16 / 9'}`}><iframe src={`https://player.vimeo.com/video/${r.id}?background=1&autoplay=1&loop=1&muted=1&dnt=1`} title={r.title || `${p.title}, video`} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>;
         if (r.type === 'h') return <h2 class="h-2" set:html={r.html} />;
         if (r.type === 'ul' || r.type === 'ol') return <ul class="prose">{r.items.map((t: string) => <li set:html={t} />)}</ul>;
         return null;

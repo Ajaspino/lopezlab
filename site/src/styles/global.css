@@ -217,7 +217,7 @@ main { min-height: 60vh; }
 .story .prose { max-width: var(--reading); }
 .story .prose p + p { margin-top: var(--space-4); }
 .story .pair { display: grid; gap: var(--space-4); }
-.story .video { aspect-ratio: var(--ratio, 16/9); background: var(--surface); }
+.story .video { aspect-ratio: var(--ratio, 16/9); background: transparent; }  /* la proporción es la real del vídeo: el contenedor se ajusta a él, sin franjas */
 .story .video iframe { width: 100%; height: 100%; border: 0; }
 @media (min-width: 768px) {
   .story { gap: var(--space-12); }
