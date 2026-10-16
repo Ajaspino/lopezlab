@@ -189,12 +189,7 @@ main { min-height: 60vh; }
 .post-teaser a:hover h2 { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 0.1em; }
 @media (min-width: 900px) { .post-teaser a { grid-template-columns: 1fr 1fr; align-items: start; padding-block: var(--space-24); gap: var(--space-12); } }
 
-.who { padding-block: var(--space-24) 0; }
-.who a { font-size: var(--t-h2); font-weight: 800; text-decoration: none; letter-spacing: -0.015em; }
-.who a::after { content: '→'; display: inline-block; margin-left: 0.4ch; text-decoration: none; transition: transform 160ms var(--ease); }
 /* El subrayado va solo en el texto: la flecha es inline-block y no lo hereda */
-.who a:hover { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 0.12em; }
-.who a:hover::after { transform: translateX(0.3em); }
 
 /* ---------- Work ---------- */
 .toolbar { display: flex; align-items: stretch; margin-top: var(--space-8); }
@@ -360,7 +355,6 @@ main { min-height: 60vh; }
 .method p { font-weight: 450; letter-spacing: -0.005em; }
 .spotlight .words { font-weight: var(--w-head); letter-spacing: -0.03em; }
 .post-teaser h2 { font-weight: var(--w-head); }
-.who a { font-weight: var(--w-head); }
 .site-footer .big { font-weight: var(--w-head); }
 .site-footer p, .site-footer address, .details p, .details address { font-weight: var(--w-light); }
 .team h3, .article .body h2 { font-weight: var(--w-card); }
@@ -384,10 +378,6 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .nav a[aria-current]:hover { opacity: 1; border-bottom-color: var(--ink); }
 .filters a:hover { opacity: var(--dim); color: var(--muted); border-bottom-color: transparent; }
 .filters a[aria-current]:hover { opacity: 1; color: var(--ink); border-bottom-color: var(--ink); }
-.who a:hover, .post-teaser a:hover h2, .spotlight a:hover .words { text-decoration: none; }
-.who a:hover, .post-teaser a:hover, .spotlight a:hover { opacity: var(--dim); }
-.who a::after { transition: none; }
-.who a:hover::after { transform: none; }
 .site-footer a:hover { opacity: var(--dim); }
 
 /* Rejilla: recortes uniformes 16:9 y huecos pequeños */
