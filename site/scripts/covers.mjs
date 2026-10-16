@@ -13,6 +13,7 @@ const chosen = {
   'good-farming-different-ways': 'blog__imagesTiny__4e3622c44ed9b3a204502df3e6786a17.jpg',
   'regenerative-farming-framed': 'blog__imagesTiny__3f0b70291e4676b6303315fbba34208e.jpg',
   'alizent': 'blog__imagesTiny__0003476e22967ada44343a5011f4bd33.jpg',
+  'een-thuis-voor-asr': 'blog__imagesTiny__e83484a2401ba61b359d7140fb0761e9.jpg',
 };
 const covers = {};
 
