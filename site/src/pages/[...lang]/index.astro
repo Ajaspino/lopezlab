@@ -10,9 +10,11 @@ const t = (p: string) => hrefFor(lang, p);
 const h = localize(pages, lang, 'pages').home;
 const projects = projectsFor(lang);
 const feature = projects.find((p) => p.slug === h.feature.slug)!;
+// Título de la pestaña y de los buscadores (ES, GL y NL son borrador para que los revise Mariola)
+const tagline: Record<string, string> = { en: 'Strategic communication & design studio', es: 'Estudio de comunicación estratégica y diseño', gl: 'Estudo de comunicación estratéxica e deseño', nl: 'Studio voor strategische communicatie en design' };
 export const getStaticPaths = () => langStaticPaths();
 ---
-<Base title={`${ui(lang, 'ui.home.title')} | LopezLab`} description={h.method.text}>
+<Base title={`Lopezlab Amsterdam | ${tagline[lang]}`} description={h.method.text}>
   <section class="hero wrap">
     <h1 class="h-display">{h.hero.title}</h1>
     <p class="sub">{h.hero.sub}</p>

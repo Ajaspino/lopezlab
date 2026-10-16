@@ -164,7 +164,7 @@ main { min-height: 60vh; }
 
 .method { padding-block: var(--space-16) var(--space-8); display: grid; gap: var(--space-6); }
 .method p { font-size: var(--t-h2); line-height: 1.15; font-weight: 600; letter-spacing: -0.015em; max-width: 24ch; text-wrap: balance; }
-.method a { justify-self: start; }
+.method a { justify-self: center; }
 
 .spotlight { margin-top: var(--space-16); background: var(--accent); color: #fff; }
 .spotlight .wrap { display: grid; gap: var(--space-8); padding-block: var(--space-12); }
