@@ -7,8 +7,17 @@ const lang = langFrom(Astro.params.lang);
 const t = (p: string) => hrefFor(lang, p);
 const a = localize(pages, lang, 'pages').about;
 import { sentenceCase } from '../../lib/text';
-// "Name of client" es un marcador de plantilla que quedó publicado; se omite
-const clients = a.method.clients.map((g) => ({ ...g, names: g.names.filter((n) => n !== 'Name of client') }));
+// Clientes en una sola lista alfabética (sin subsecciones). "Name of client" es un marcador de plantilla que quedó publicado y se omite.
+// Se unifican repetidos (Esero, Flamenco Biënnale, A.S.R. / asr) y las mayúsculas de los nombres escritos todo en minúscula.
+const norm = (n: string) => n.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const pretty = (n: string) => n.trim().replace(/(^|[\s+])(\p{Ll})/gu, (_, s, c) => s + c.toUpperCase());
+const byKey = new Map<string, string>();
+for (const g of a.method.clients) for (const n of g.names) {
+  if (n === 'Name of client') continue;
+  const k = norm(n), cur = byKey.get(k);
+  if (!cur || (cur === cur.toLowerCase() && n !== n.toLowerCase())) byKey.set(k, n);   // si hay dos grafías, gana la que lleva mayúsculas
+}
+const clientNames = [...byKey.values()].map(pretty).sort((x, y) => x.localeCompare(y, lang, { sensitivity: 'base', ignorePunctuation: true }));
 export const getStaticPaths = () => langStaticPaths();
 ---
 <Base title={`${ui(lang, 'ui.about.title')} | LopezLab`} description={a.whatWeDo.text}>
@@ -39,15 +48,16 @@ export const getStaticPaths = () => langStaticPaths();
       <h2 class="h-1">{sentenceCase(a.method.title)}</h2>
       <div>
         <p class="text">{a.method.text}</p>
-        <div class="clients" id="clients">
-          {clients.map((g) => (
-            <div>
-              <h3>{g.sector}</h3>
-              <ul>{g.names.map((n) => <li>{n}</li>)}</ul>
-            </div>
-          ))}
-        </div>
-        <p class="text" style="margin-top:3rem"><a href={t('/contact/')}>{a.method.outro}</a></p>
+      </div>
+    </section>
+
+    <section class="block" id="clients">
+      <h2 class="h-1">{sentenceCase(ui(lang, 'ui.home.who'))}</h2>
+      <div>
+        <ul class="client-list">
+          {clientNames.map((n) => <li>{n}</li>)}
+        </ul>
+        <p class="text" style="margin-top:4rem"><a href={t('/contact/')}>{a.method.outro}</a></p>
       </div>
     </section>
   </div>
