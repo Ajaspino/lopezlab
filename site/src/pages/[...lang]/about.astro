@@ -20,7 +20,7 @@ for (const g of a.method.clients) for (const n of g.names) {
 const clientNames = [...byKey.values()].map(pretty).sort((x, y) => x.localeCompare(y, lang, { sensitivity: 'base', ignorePunctuation: true }));
 // Logos en SVG de un solo color (currentColor: negro, y blanco en modo oscuro). Los clientes sin logo se muestran con su nombre.
 const logoFiles = import.meta.glob('../../assets/clients/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders', amstel: 'amstel', studioedelkoort: 'edelkoort', marteenbaas: 'baas', maartenbaas: 'baas', fairfood: 'fairfood', kikijoost: 'kiki', mariablaisse: 'blaisse', trendunion: 'trendunion', ccamsteltheater: 'ccamstel' };
+const logoByKey: Record<string, string> = { asr: 'asr', arriva: 'arriva', esero: 'esero', ferring: 'ferring', flamencobiennale: 'flamenco', xolvio: 'xolvio', marcelwanders: 'wanders', amstel: 'amstel', studioedelkoort: 'edelkoort', marteenbaas: 'baas', maartenbaas: 'baas', fairfood: 'fairfood', alboroque: 'alboroque', kikijoost: 'kiki', mariablaisse: 'blaisse', trendunion: 'trendunion', ccamsteltheater: 'ccamstel' };
 const logoFor = (n: string) => { const f = logoByKey[norm(n)]; return f ? logoFiles[`../../assets/clients/${f}.svg`] : undefined; };
 export const getStaticPaths = () => langStaticPaths();
 ---
@@ -61,7 +61,9 @@ export const getStaticPaths = () => langStaticPaths();
         <ul class="client-wall">
           {clientNames.map((n) => {
             const svg = logoFor(n);
-            return <li>{svg ? <span class="logo" role="img" aria-label={n} set:html={svg} /> : <span class="name">{n}</span>}</li>;
+            const vb = svg?.match(/viewBox="[\d.\s-]*?([\d.]+)\s+([\d.]+)"/);
+            const tall = vb ? Number(vb[1]) / Number(vb[2]) < 1.3 : false;
+            return <li>{svg ? <span class:list={['logo', { tall }]} role="img" aria-label={n} set:html={svg} /> : <span class="name">{n}</span>}</li>;
           })}
         </ul>
         <p class="text" style="margin-top:4rem"><a href={t('/contact/')}>{a.method.outro}</a></p>

@@ -477,3 +477,5 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .client-wall .name { font-size: 1.0625rem; font-weight: var(--w-card); text-align: center; }
 @media (min-width: 640px) { .client-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } .client-wall li:nth-child(odd) { border-right: 0; } .client-wall li:not(:nth-child(3n)) { border-right: 1px solid var(--line, currentColor); } }
 @media (min-width: 1100px) { .client-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); } .client-wall li:not(:nth-child(3n)) { border-right: 0; } .client-wall li:not(:nth-child(4n)) { border-right: 1px solid var(--line, currentColor); } }
+.client-wall .logo.tall { height: 4.25rem; }
+.client-wall li:has(.logo.tall) { min-height: 7.25rem; }
