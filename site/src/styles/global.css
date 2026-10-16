@@ -449,3 +449,12 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
   .brand-short { display: inline; }
   .brand { font-size: 0.875rem; }   /* 12 px → 14 px: dos puntos más */
 }
+
+/* Selector de idioma en la cabecera de escritorio: mismo tamaño, tipografía, color y hover que el menú de al lado
+   (.nav). El idioma actual se marca con el mismo subrayado que la sección actual. */
+.head-right .lang-toggle { align-self: stretch; align-items: stretch; gap: 0; font-size: var(--t-micro); font-weight: 500; letter-spacing: 0.08em; line-height: 1.3; }
+.head-right .lang-toggle a { display: flex; align-items: center; padding: 0 0.25rem; margin: 0 0 -1px; color: var(--ink); border-bottom: 2px solid transparent; transition: opacity var(--dim-ease); }
+.head-right .lang-toggle a:hover { color: var(--ink); opacity: var(--dim); }
+.head-right .lang-toggle a[aria-current] { color: var(--ink); font-weight: 500; border-bottom-color: var(--ink); }
+.head-right .lang-toggle a[aria-current]:hover { opacity: 1; }
+.head-right .lang-toggle .sep { display: flex; align-items: center; color: var(--muted); opacity: 0.6; }
