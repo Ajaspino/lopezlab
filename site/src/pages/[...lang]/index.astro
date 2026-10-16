@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Img from '../../components/Img.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import pages from '../../data/pages.json';
-import { accentOf, projectsFor, coverFor, spotlightCover } from '../../lib/images';
+import { accentOf, projectsFor, coverFor } from '../../lib/images';
 import { langFrom, hrefFor, langStaticPaths, localize, ui } from '../../lib/i18n';
 const lang = langFrom(Astro.params.lang);
 const t = (p: string) => hrefFor(lang, p);
@@ -33,7 +33,7 @@ export const getStaticPaths = () => langStaticPaths();
           <h2 class="words">{h.feature.words.map((w) => <span>{w}</span>)}</h2>
           <p class="sub">{h.feature.sub}</p>
         </div>
-        <div class="ph"><Img file={spotlightCover(feature.slug, feature.cover)} alt="" sizes="(min-width: 900px) 40vw, 100vw" /></div>
+        <div class="ph"><Img file={coverFor(feature.slug, feature.cover)} alt="" sizes="(min-width: 900px) 40vw, 100vw" position="35% 50%" /></div>
       </a>
     </div>
   </section>
