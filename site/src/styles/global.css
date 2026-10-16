@@ -428,27 +428,38 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .notfound .links { display: flex; gap: var(--space-8); }
 
 /* ---------- Menú móvil (hamburguesa) ----------
-   Mismo planteamiento que la web de chenchu: tres rayas que se vuelven X, pantalla completa con las secciones
-   en grande separadas por líneas y el idioma al final. */
+   Medidas de la web de chenchu (su rem = 17 px): botón de 24 px con rayas de 1 px y 5 px de hueco, opciones de 24 px en peso 500
+   separadas por líneas de 1 px con 34 px de relleno vertical, y el idioma en línea (EN / ES / GL / NL) al final. */
 .menu-toggle { display: none; align-self: center; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; margin-right: -10px; padding: 10px; background: none; border: 0; cursor: pointer; color: var(--ink); }
-.menu-toggle span { display: block; width: 24px; height: 1.5px; background: currentColor; transition: transform 0.25s ease, opacity 0.25s ease; }
-.menu-toggle.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.menu-toggle span { display: block; width: 24px; height: 1px; background: currentColor; transition: transform 0.25s ease, opacity 0.25s ease; }
+.menu-toggle.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
 .menu-toggle.is-open span:nth-child(2) { opacity: 0; }
-.menu-toggle.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+.menu-toggle.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 .mobile-menu { display: none; }
-.mobile-nav { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.mobile-nav { list-style: none; margin: 0 0 4rem; padding: 0; border-top: 1px solid var(--line); }
 .mobile-nav li { border-bottom: 1px solid var(--line); }
-.mobile-nav a { display: flex; align-items: center; justify-content: space-between; padding: var(--space-6) 0; font-size: clamp(1.75rem, 8.5vw, 2.5rem); font-weight: var(--w-head); letter-spacing: -0.02em; line-height: 1.1; text-decoration: none; }
-.mobile-nav a[aria-current]::after, .menu-lang a[aria-current]::after { content: ''; flex: none; display: inline-block; width: 0.9rem; height: 0.7rem; margin-left: 0.8rem; background: currentColor; clip-path: polygon(0.0% 45.9%, 9.6% 32.4%, 38.5% 73.0%, 90.4% 0.0%, 100.0% 13.5%, 38.5% 100.0%); }
-.menu-lang { margin-top: var(--space-12); }
-.menu-lang .label { color: var(--muted); margin-bottom: var(--space-2); }
-.menu-lang ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 var(--space-6); }
-.menu-lang a { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: 1.125rem; text-decoration: none; }
-.menu-lang a[aria-current] { font-weight: 700; }
+.mobile-nav a { display: block; padding-block: 2.125rem; font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); text-decoration: none; transition: color 0.15s; }
+.mobile-nav a:hover { color: var(--muted); opacity: 1; }
+.menu-lang { display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; letter-spacing: 0.07em; text-transform: uppercase; }
+.menu-lang a { padding: 0.8rem 0.25rem; margin-inline: -0.25rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.menu-lang a:hover { color: var(--ink); opacity: 1; }
+.menu-lang a[aria-current] { color: var(--ink); font-weight: 700; }
+.menu-lang .sep { color: var(--line); }
 @media (max-width: 767px) {
   .head-right { display: none; }
   .menu-toggle { display: flex; }
-  .mobile-menu { display: flex; flex-direction: column; position: fixed; inset: 0; z-index: 19; background: var(--bg); padding: calc(var(--header-h) + var(--space-6)) var(--gutter) var(--space-8); overflow-y: auto; overscroll-behavior: contain; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
+  .mobile-menu { display: flex; flex-direction: column; align-items: stretch; position: fixed; inset: 0; z-index: 19; background: var(--bg); padding: var(--header-h) var(--gutter) var(--space-8); overflow-y: auto; overscroll-behavior: contain; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
   .mobile-menu.is-open { opacity: 1; visibility: visible; transition: opacity 0.25s ease; }
   html.menu-open { overflow: hidden; }
+}
+
+/* ---------- Móvil: márgenes laterales +8 y marca abreviada en vertical ---------- */
+.brand-short { display: none; }
+@media (max-width: 767px) {
+  :root { --gutter: calc(clamp(1rem, 3.5vw, 3.5rem) + 8px); }
+}
+@media (max-width: 767px) and (orientation: portrait) {
+  .brand-full { display: none; }
+  .brand-short { display: inline; }
+  .brand { font-size: 0.875rem; }   /* 12 px → 14 px: dos puntos más */
 }

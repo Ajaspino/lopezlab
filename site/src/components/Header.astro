@@ -8,7 +8,7 @@ const current = (href: string) => path.startsWith(href) || (href === '/work/' &&
 ---
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href={hrefFor(lang, '/')}>Lopezlab Amsterdam.</a>
+    <a class="brand" href={hrefFor(lang, '/')} aria-label="Lopezlab Amsterdam."><span class="brand-full">Lopezlab Amsterdam.</span><span class="brand-short" aria-hidden="true">Lopezlab Ams.</span></a>
     <div class="head-right">
       <nav class="nav" aria-label={ui(lang, 'ui.nav.main')}>
         {items.map(([name, href]) => <a href={hrefFor(lang, href)} aria-current={current(href) ? 'page' : undefined}>{name}</a>)}
@@ -27,11 +27,13 @@ const current = (href: string) => path.startsWith(href) || (href === '/work/' &&
       {items.map(([name, href]) => <li><a href={hrefFor(lang, href)} aria-current={current(href) ? 'page' : undefined}>{name}</a></li>)}
     </ul>
   </nav>
-  <div class="menu-lang">
-    <p class="label">{ui(lang, 'ui.footer.language')}</p>
-    <ul>
-      {LOCALES.map((l) => <li><a href={switchPath(Astro.url, l)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{LANG_NAMES[l]}</a></li>)}
-    </ul>
+  <div class="menu-lang" role="group" aria-label={ui(lang, 'ui.footer.language')}>
+    {LOCALES.map((l, i) => (
+      <Fragment>
+        {i > 0 && <span class="sep" aria-hidden="true">/</span>}
+        <a href={switchPath(Astro.url, l)} hreflang={l} lang={l} aria-label={LANG_NAMES[l]} aria-current={l === lang ? 'true' : undefined}>{l}</a>
+      </Fragment>
+    ))}
   </div>
 </div>
 <script>
