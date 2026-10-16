@@ -349,5 +349,7 @@
 "projects.32.lead": "s0242",
 "projects.32.blocks.1.html": "s0243",
 "projects.32.blocks.3.html": "s0244",
-"ui.home.title": "s0245"
+"ui.home.title": "s0245",
+"ui.menu.open": "s0246",
+"ui.menu.close": "s0247"
 }

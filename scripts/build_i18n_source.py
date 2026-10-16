@@ -22,7 +22,7 @@ UI = {
  'ui.about.title': 'About',
 }
 # Textos de interfaz añadidos después: se registran al final para no desplazar los ids ya traducidos
-UI_LATE = {'ui.home.title': 'Pitching & Strategic Communication'}
+UI_LATE = {'ui.home.title': 'Pitching & Strategic Communication', 'ui.menu.open': 'Open menu', 'ui.menu.close': 'Close menu'}
 TEXT_KEYS = {'title','label','lead','sub','html','role','cta','text','sector','outro','metaDescription'}
 paths = {}; texts = {}; byText = {}
 def add(path, text):

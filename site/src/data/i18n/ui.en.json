@@ -23,5 +23,7 @@
  "ui.contact.call": "Call",
  "ui.contact.titleTag": "Contact",
  "ui.about.title": "About",
- "ui.home.title": "Pitching & Strategic Communication"
+ "ui.home.title": "Pitching & Strategic Communication",
+ "ui.menu.open": "Open menu",
+ "ui.menu.close": "Close menu"
 }

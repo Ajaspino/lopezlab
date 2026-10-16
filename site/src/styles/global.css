@@ -285,13 +285,6 @@ main { min-height: 60vh; }
 .lang li a:hover { background: var(--surface); }
 .lang li a[aria-current] { font-weight: 700; }
 .lang li a[aria-current]::after { content: ''; display: inline-block; width: 0.6rem; height: 0.427rem; margin-left: 0.8em; background: currentColor; clip-path: polygon(0.0% 45.9%, 9.6% 32.4%, 38.5% 73.0%, 90.4% 0.0%, 100.0% 13.5%, 38.5% 100.0%); }
-/* Móvil: el selector va en el pie para no apretar la cabecera */
-.lang-head { display: none; }
-.lang-foot-h { display: block; }
-@media (min-width: 768px) { .lang-head { display: block; } .lang-foot, .lang-foot-h { display: none; } }
-.site-footer .lang ul { background: var(--invert-bg); color: var(--invert-fg); border-color: var(--invert-fg); }
-.site-footer .lang li a:hover { background: oklch(0.3 0.01 260); }
-.site-footer .lang summary { padding-inline: 0; font-size: 1.125rem; }
 
 /* ---------- Movimiento ---------- */
 @media (prefers-reduced-motion: no-preference) {
@@ -413,7 +406,6 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .who a:hover::after { transform: none; }
 .site-footer a:hover { opacity: var(--dim); }
 .lang li a:hover { opacity: var(--dim); background: transparent; }
-.site-footer .lang li a:hover { background: transparent; }
 
 /* Rejilla: recortes uniformes 16:9 y huecos pequeños */
 .card .ph { aspect-ratio: 16 / 9; }
@@ -435,12 +427,28 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .notfound { padding-block: var(--space-24) var(--space-16); display: grid; gap: var(--space-6); justify-items: start; }
 .notfound .links { display: flex; gap: var(--space-8); }
 
-/* Cabecera en móvil estrecho: marca arriba y menú debajo a todo el ancho (los rótulos de ES/GL/NL son más largos y no caben en una fila) */
-@media (max-width: 559px) {
-  :root { --header-h: 5.25rem; }
-  .site-header .wrap { flex-direction: column; justify-content: space-between; align-items: stretch; gap: 0; }
-  .brand { align-self: flex-start; padding-top: 0.875rem; }
-  .head-right { width: 100%; }
-  .nav { width: 100%; justify-content: space-between; gap: var(--space-2); }
-  .nav a { min-height: 2.75rem; }
+/* ---------- Menú móvil (hamburguesa) ----------
+   Mismo planteamiento que la web de chenchu: tres rayas que se vuelven X, pantalla completa con las secciones
+   en grande separadas por líneas y el idioma al final. */
+.menu-toggle { display: none; align-self: center; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; margin-right: -10px; padding: 10px; background: none; border: 0; cursor: pointer; color: var(--ink); }
+.menu-toggle span { display: block; width: 24px; height: 1.5px; background: currentColor; transition: transform 0.25s ease, opacity 0.25s ease; }
+.menu-toggle.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.menu-toggle.is-open span:nth-child(2) { opacity: 0; }
+.menu-toggle.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+.mobile-menu { display: none; }
+.mobile-nav { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.mobile-nav li { border-bottom: 1px solid var(--line); }
+.mobile-nav a { display: flex; align-items: center; justify-content: space-between; padding: var(--space-6) 0; font-size: clamp(1.75rem, 8.5vw, 2.5rem); font-weight: var(--w-head); letter-spacing: -0.02em; line-height: 1.1; text-decoration: none; }
+.mobile-nav a[aria-current]::after, .menu-lang a[aria-current]::after { content: ''; flex: none; display: inline-block; width: 0.9rem; height: 0.7rem; margin-left: 0.8rem; background: currentColor; clip-path: polygon(0.0% 45.9%, 9.6% 32.4%, 38.5% 73.0%, 90.4% 0.0%, 100.0% 13.5%, 38.5% 100.0%); }
+.menu-lang { margin-top: var(--space-12); }
+.menu-lang .label { color: var(--muted); margin-bottom: var(--space-2); }
+.menu-lang ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 var(--space-6); }
+.menu-lang a { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: 1.125rem; text-decoration: none; }
+.menu-lang a[aria-current] { font-weight: 700; }
+@media (max-width: 767px) {
+  .head-right { display: none; }
+  .menu-toggle { display: flex; }
+  .mobile-menu { display: flex; flex-direction: column; position: fixed; inset: 0; z-index: 19; background: var(--bg); padding: calc(var(--header-h) + var(--space-6)) var(--gutter) var(--space-8); overflow-y: auto; overscroll-behavior: contain; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
+  .mobile-menu.is-open { opacity: 1; visibility: visible; transition: opacity 0.25s ease; }
+  html.menu-open { overflow: hidden; }
 }

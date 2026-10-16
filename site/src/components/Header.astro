@@ -1,6 +1,6 @@
 ---
 import LangSwitch from './LangSwitch.astro';
-import { langOfUrl, hrefFor, ui, stripBase } from '../lib/i18n';
+import { LOCALES, LANG_NAMES, langOfUrl, hrefFor, ui, stripBase, switchPath } from '../lib/i18n';
 const lang = langOfUrl(Astro.url);
 const path = stripBase(Astro.url.pathname).replace(new RegExp(`^/${lang}(?=/)`), '') || '/';
 const items = [[ui(lang, 'ui.nav.work'), '/work/'], [ui(lang, 'ui.nav.about'), '/about/'], [ui(lang, 'ui.nav.contact'), '/contact/']];
@@ -15,5 +15,41 @@ const current = (href: string) => path.startsWith(href) || (href === '/work/' &&
       </nav>
       <LangSwitch class="lang-head" />
     </div>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false"
+      aria-label={ui(lang, 'ui.menu.open')} data-open={ui(lang, 'ui.menu.open')} data-close={ui(lang, 'ui.menu.close')}>
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+<div class="mobile-menu" id="mobile-menu" inert>
+  <nav aria-label={ui(lang, 'ui.nav.main')}>
+    <ul class="mobile-nav">
+      {items.map(([name, href]) => <li><a href={hrefFor(lang, href)} aria-current={current(href) ? 'page' : undefined}>{name}</a></li>)}
+    </ul>
+  </nav>
+  <div class="menu-lang">
+    <p class="label">{ui(lang, 'ui.footer.language')}</p>
+    <ul>
+      {LOCALES.map((l) => <li><a href={switchPath(Astro.url, l)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{LANG_NAMES[l]}</a></li>)}
+    </ul>
+  </div>
+</div>
+<script>
+  const toggle = document.getElementById('menu-toggle') as HTMLButtonElement | null;
+  const menu = document.getElementById('mobile-menu');
+  if (toggle && menu) {
+    const set = (open: boolean) => {
+      toggle.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', (open ? toggle.dataset.close : toggle.dataset.open) ?? '');
+      menu.classList.toggle('is-open', open);
+      if (open) menu.removeAttribute('inert'); else menu.setAttribute('inert', '');
+      document.documentElement.classList.toggle('menu-open', open);
+      if (open) menu.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+    };
+    toggle.addEventListener('click', () => set(!menu.classList.contains('is-open')));
+    menu.addEventListener('click', (e) => { if ((e.target as Element).closest('a')) set(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('is-open')) { set(false); toggle.focus(); } });
+    matchMedia('(min-width: 768px)').addEventListener('change', (e) => { if (e.matches) set(false); });
+  }
+</script>
