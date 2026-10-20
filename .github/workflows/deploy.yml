@@ -6,6 +6,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Cada 4 horas: vuelve a leer los contadores de visitas y republica la página /stats/
+    - cron: '17 */4 * * *'
 
 permissions:
   contents: read
@@ -30,6 +33,8 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
       - run: npm ci
+      # Lee los contadores públicos de visitas (no necesita claves). Si falla, la compilación sigue con los últimos datos.
+      - run: node scripts/fetch-stats.mjs
       - run: npm run build
         env:
           # La web vive en https://ajaspino.github.io/lopezlab/

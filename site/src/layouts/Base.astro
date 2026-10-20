@@ -3,10 +3,15 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { langOfUrl, ui, LOCALES, switchPath, SITE_LIVE, TRANSLATIONS_INDEXABLE, SITE_URL, withBase, AUTO_LANGUAGE, LANG_PREF_KEY } from '../lib/i18n';
+import statsCfg from '../lib/stats-config.json';
 interface Props { title: string; description?: string; accent?: string; noindex?: boolean; }
 const { title, description, accent, noindex = false } = Astro.props;
 const lang = langOfUrl(Astro.url);
 const indexable = SITE_LIVE && !noindex && (lang === 'en' || TRANSLATIONS_INDEXABLE);
+// Contador de visitas sin cookies: solo en producción, en el dominio real y en páginas indexables (no en /stats/ ni en la 404)
+const track = import.meta.env.PROD && !noindex;
+const countryOf = Object.fromEntries(Object.entries(statsCfg.timezones));
+const countries = [...new Set(Object.values(statsCfg.timezones))];
 const abs = (path: string) => new URL(path, SITE_URL).href;
 const canonical = abs(Astro.url.pathname);
 // Redirección por idioma del navegador: solo en páginas en inglés (no en la 404) y sin elección previa guardada
@@ -31,6 +36,34 @@ const autoTargets = AUTO_LANGUAGE && lang === 'en' && !noindex ? Object.fromEntr
             if (l === 'en') return;
             if (autoTargets[l]) { location.replace(autoTargets[l]); return; }
           }
+        } catch (e) {}
+      })();
+    </script>}
+    {track && <script is:inline define:vars={{ NS: statsCfg.namespace, API: statsCfg.api, HOST: new URL(SITE_URL).hostname, MAP: countryOf, COUNTRIES: countries, LANGS: statsCfg.languages }}>
+      // Cuenta una visita por sesión del navegador: total, día, país (estimado por la zona horaria) e idioma. Sin cookies ni identificadores.
+      (function () {
+        try {
+          if (location.hostname !== HOST) return;
+          if (navigator.doNotTrack === '1' || navigator.webdriver) return;
+          if (/bot|crawl|spider|headless|lighthouse/i.test(navigator.userAgent)) return;
+          if (localStorage.getItem('lopezlab:no-track') || sessionStorage.getItem('lopezlab:counted')) return;
+          sessionStorage.setItem('lopezlab:counted', '1');
+          var tz = '';
+          try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+          var cc = MAP[tz];
+          if (!cc) { var m = /-([A-Za-z]{2})$/.exec(navigator.language || ''); cc = m ? m[1].toUpperCase() : 'XX'; }
+          if (COUNTRIES.indexOf(cc) < 0) cc = 'XX';
+          var lg = (navigator.language || '').slice(0, 2).toLowerCase();
+          if (LANGS.indexOf(lg) < 0) lg = 'other';
+          var ua = navigator.userAgent;
+          // Dispositivo: móvil, tableta (incluye iPad, que se presenta como Mac con pantalla táctil) o escritorio
+          var dv = /iPad|Tablet/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) || (/Android/.test(ua) && !/Mobile/.test(ua)) ? 'tablet' : /Mobi|iPhone|iPod|Android/i.test(ua) ? 'mobile' : 'desktop';
+          // Navegador, por orden de especificidad (Edge, Opera y Samsung también dicen "Chrome")
+          var br = /Edg(e|A|iOS)?\//.test(ua) ? 'edge' : /OPR\/|Opera/.test(ua) ? 'opera' : /SamsungBrowser/.test(ua) ? 'samsung' : /Firefox|FxiOS/.test(ua) ? 'firefox' : /Chrome|CriOS/.test(ua) ? 'chrome' : /Safari/.test(ua) ? 'safari' : 'other';
+          var day = new Date().toISOString().slice(0, 10);
+          ['v', 'd-' + day, 'c-' + cc, 'l-' + lg, 'dv-' + dv, 'b-' + br].forEach(function (k) {
+            fetch(API + '/hit/' + NS + '/' + k, { keepalive: true }).catch(function () {});
+          });
         } catch (e) {}
       })();
     </script>}

@@ -1,0 +1,92 @@
+---
+import Base from '../../layouts/Base.astro';
+import data from '../../data/stats.json';
+import { langFrom, langStaticPaths } from '../../lib/i18n';
+export const getStaticPaths = () => langStaticPaths();
+const lang = langFrom(Astro.params.lang);
+// Textos de la página. ES, GL y NL son borrador para que los revise Mariola.
+const T = {
+  en: { title: 'Stats', none: 'No data yet. Numbers will appear here after the first visits, and are refreshed every few hours.', last30: 'Visits · last 30 days', all: 'Visits · all time', best: 'Best day', top: 'Top country', perDay: 'Visits per day', chart: 'Visits per day, {from} to {to}. Best day: {n}.', countries: 'Countries', langs: 'Browser languages', devices: 'Devices', browsers: 'Browsers', mobile: 'Mobile', tablet: 'Tablet', desktop: 'Desktop', other: 'Other', unknown: 'Unknown', samsung: 'Samsung Internet', updated: 'Updated', note: 'Counts visits, not people: one per browser session, no cookies. Country is estimated from the browser’s time zone, so it can be off for travellers or VPNs.', btn: 'Don’t count my visits on this device', done: 'Done: this device is not counted.', locale: 'en-GB' },
+  es: { title: 'Estadísticas', none: 'Aún no hay datos. Los números aparecerán aquí tras las primeras visitas y se actualizan cada pocas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mejor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, del {from} al {to}. Mejor día: {n}.', countries: 'Países', langs: 'Idiomas del navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móvil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Otros', unknown: 'Desconocido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Cuenta visitas, no personas: una por sesión del navegador, sin cookies. El país se estima por la zona horaria del navegador, así que puede fallar con viajeros o VPN.', btn: 'No contar mis visitas en este dispositivo', done: 'Hecho: este dispositivo no se cuenta.', locale: 'es-ES' },
+  gl: { title: 'Estatísticas', none: 'Aínda non hai datos. Os números aparecerán aquí tras as primeiras visitas e actualízanse cada poucas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mellor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, do {from} ao {to}. Mellor día: {n}.', countries: 'Países', langs: 'Idiomas do navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móbil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Outros', unknown: 'Descoñecido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Conta visitas, non persoas: unha por sesión do navegador, sen cookies. O país estímase pola zona horaria do navegador, así que pode fallar con viaxeiros ou VPN.', btn: 'Non contar as miñas visitas neste dispositivo', done: 'Feito: este dispositivo non se conta.', locale: 'gl-ES' },
+  nl: { title: 'Statistieken', none: 'Nog geen gegevens. De cijfers verschijnen hier na de eerste bezoeken en worden om de paar uur bijgewerkt.', last30: 'Bezoeken · laatste 30 dagen', all: 'Bezoeken · totaal', best: 'Beste dag', top: 'Belangrijkste land', perDay: 'Bezoeken per dag', chart: 'Bezoeken per dag, van {from} tot {to}. Beste dag: {n}.', countries: 'Landen', langs: 'Browsertalen', devices: 'Apparaten', browsers: 'Browsers', mobile: 'Mobiel', tablet: 'Tablet', desktop: 'Desktop', other: 'Overig', unknown: 'Onbekend', samsung: 'Samsung Internet', updated: 'Bijgewerkt', note: 'Telt bezoeken, geen personen: één per browsersessie, zonder cookies. Het land wordt geschat op basis van de tijdzone van de browser, dus het kan afwijken bij reizigers of VPN.', btn: 'Tel mijn bezoeken op dit apparaat niet mee', done: 'Klaar: dit apparaat wordt niet meegeteld.', locale: 'nl-NL' },
+}[lang];
+const s = data as any;
+const has = !!s.generatedAt;
+const dn = (type: 'region' | 'language') => { try { return new Intl.DisplayNames(T.locale, { type }); } catch { return new Intl.DisplayNames('en', { type }); } };
+const regions = dn('region');
+const languages = dn('language');
+const countryName = (c: string) => (c === 'XX' ? T.unknown : regions.of(c) ?? c);
+const langName = (l: string) => (l === 'other' ? T.other : languages.of(l) ?? l);
+const deviceName = (d: string) => (T as any)[d] ?? d;
+const browserName = (b: string) => ({ chrome: 'Chrome', safari: 'Safari', firefox: 'Firefox', edge: 'Edge', samsung: T.samsung, opera: 'Opera', other: T.other } as Record<string, string>)[b] ?? b;
+const fmt = (n: number) => n.toLocaleString(T.locale);
+const day = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString(T.locale, { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const updated = has ? new Date(s.generatedAt).toLocaleString(T.locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Amsterdam' }) : '';
+const days: { date: string; visits: number }[] = s.days ?? [];
+const max = Math.max(1, ...days.map((d) => d.visits));
+const best = days.reduce((b, d) => (d.visits > (b?.visits ?? -1) ? d : b), null as null | { date: string; visits: number });
+const topCountry = s.countries?.find((c: any) => c.code !== 'XX');
+const shareOf = (list: any[], v: number) => { const t = list.reduce((a, x) => a + x.value, 0) || 1; return Math.round((v / t) * 100); };
+---
+<Base title={`${T.title} | LopezLab`} noindex>
+  <div class="wrap stats">
+    <h1 class="h-1">{T.title}</h1>
+    {!has && <p class="lead">{T.none}</p>}
+    {has && (
+      <Fragment>
+        <dl class="kpis">
+          <div><dt>{T.last30}</dt><dd>{fmt(s.last30)}</dd></div>
+          <div><dt>{T.all}</dt><dd>{fmt(s.total)}</dd></div>
+          <div><dt>{T.best}</dt><dd>{best && best.visits > 0 ? fmt(best.visits) : '–'}<small>{best && best.visits > 0 ? day(best.date) : ''}</small></dd></div>
+          <div><dt>{T.top}</dt><dd class="txt">{topCountry ? countryName(topCountry.code) : '–'}</dd></div>
+        </dl>
+
+        <section aria-labelledby="h-days">
+          <h2 id="h-days" class="label">{T.perDay}</h2>
+          <div class="bars" role="img" aria-label={T.chart.replace('{from}', day(days[0].date)).replace('{to}', day(days[days.length - 1].date)).replace('{n}', String(best?.visits ?? 0))}>
+            {days.map((d) => <span style={`--h:${Math.max(d.visits ? 3 : 0, Math.round((d.visits / max) * 100))}%`} title={`${day(d.date)}: ${d.visits}`}></span>)}
+          </div>
+          <p class="axis"><span>{day(days[0].date)}</span><span>{day(days[days.length - 1].date)}</span></p>
+        </section>
+
+        <div class="ranks">
+          <section aria-labelledby="h-countries">
+            <h2 id="h-countries" class="label">{T.countries}</h2>
+            <ol class="rank">
+              {s.countries.slice(0, 10).map((c: any) => <li style={`--w:${shareOf(s.countries, c.value)}%`}><span>{countryName(c.code)}</span><b>{shareOf(s.countries, c.value)}%</b></li>)}
+            </ol>
+          </section>
+          <section aria-labelledby="h-langs">
+            <h2 id="h-langs" class="label">{T.langs}</h2>
+            <ol class="rank">
+              {s.languages.slice(0, 10).map((l: any) => <li style={`--w:${shareOf(s.languages, l.value)}%`}><span>{langName(l.code)}</span><b>{shareOf(s.languages, l.value)}%</b></li>)}
+            </ol>
+          </section>
+          <section aria-labelledby="h-devices">
+            <h2 id="h-devices" class="label">{T.devices}</h2>
+            <ol class="rank">
+              {(s.devices ?? []).map((d: any) => <li style={`--w:${shareOf(s.devices, d.value)}%`}><span>{deviceName(d.code)}</span><b>{shareOf(s.devices, d.value)}%</b></li>)}
+            </ol>
+          </section>
+          <section aria-labelledby="h-browsers">
+            <h2 id="h-browsers" class="label">{T.browsers}</h2>
+            <ol class="rank">
+              {(s.browsers ?? []).map((b: any) => <li style={`--w:${shareOf(s.browsers, b.value)}%`}><span>{browserName(b.code)}</span><b>{shareOf(s.browsers, b.value)}%</b></li>)}
+            </ol>
+          </section>
+        </div>
+        <p class="note">{T.updated} {updated}. {T.note}</p>
+      </Fragment>
+    )}
+    <p class="note"><button type="button" class="link-arrow" id="notrack" data-done={T.done}>{T.btn}</button> <span id="notrack-state" role="status"></span></p>
+  </div>
+</Base>
+<script is:inline>
+  (function () {
+    var b = document.getElementById('notrack'), st = document.getElementById('notrack-state');
+    function show() { try { st.textContent = localStorage.getItem('lopezlab:no-track') ? b.getAttribute('data-done') : ''; } catch (e) {} }
+    b.addEventListener('click', function () { try { localStorage.setItem('lopezlab:no-track', '1'); } catch (e) {} show(); });
+    show();
+  })();
+</script>
