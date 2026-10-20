@@ -61,7 +61,7 @@ const autoTargets = AUTO_LANGUAGE && lang === 'en' && !noindex ? Object.fromEntr
           // Navegador, por orden de especificidad (Edge, Opera y Samsung también dicen "Chrome")
           var br = /Edg(e|A|iOS)?\//.test(ua) ? 'edge' : /OPR\/|Opera/.test(ua) ? 'opera' : /SamsungBrowser/.test(ua) ? 'samsung' : /Firefox|FxiOS/.test(ua) ? 'firefox' : /Chrome|CriOS/.test(ua) ? 'chrome' : /Safari/.test(ua) ? 'safari' : 'other';
           var day = new Date().toISOString().slice(0, 10);
-          ['v', 'd-' + day, 'c-' + cc, 'l-' + lg, 'dv-' + dv, 'b-' + br].forEach(function (k) {
+          ['visits', 'd-' + day, 'c-' + cc, 'l-' + lg, 'dv-' + dv, 'b-' + br].forEach(function (k) {
             fetch(API + '/hit/' + NS + '/' + k, { keepalive: true }).catch(function () {});
           });
         } catch (e) {}

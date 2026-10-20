@@ -13,30 +13,31 @@ const browsers = cfg.browsers;
 const days = [];
 for (let i = cfg.days - 1; i >= 0; i--) days.push(new Date(Date.now() - i * 864e5).toISOString().slice(0, 10));
 
-const keys = ['v', ...days.map((d) => `d-${d}`), ...countries.map((c) => `c-${c}`), ...langs.map((l) => `l-${l}`), ...devices.map((d) => `dv-${d}`), ...browsers.map((b) => `b-${b}`)];
+const keys = ['visits', ...days.map((d) => `d-${d}`), ...countries.map((c) => `c-${c}`), ...langs.map((l) => `l-${l}`), ...devices.map((d) => `dv-${d}`), ...browsers.map((b) => `b-${b}`)];
 
-// El servicio admite 30 peticiones cada 10 s por dirección: 25 por tanda y una pausa entre tandas
+// El servicio admite 30 peticiones cada 10 s por dirección: tandas de 20 con pausa y, si aun así responde 429, espera y reintenta
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-async function read(key) {
+async function read(key, tries = 5) {
   const r = await fetch(`${cfg.api}/get/${cfg.namespace}/${key}`);
   if (r.status === 404) return 0; // sin visitas todavía
+  if (r.status === 429 && tries > 0) { await sleep(11000); return read(key, tries - 1); }
   if (!r.ok) throw new Error(`${key}: ${r.status}`);
   return Number((await r.json()).value) || 0;
 }
 
 try {
   const values = {};
-  for (let i = 0; i < keys.length; i += 25) {
-    const batch = keys.slice(i, i + 25);
+  for (let i = 0; i < keys.length; i += 20) {
+    const batch = keys.slice(i, i + 20);
     const res = await Promise.all(batch.map(read));
     batch.forEach((k, j) => (values[k] = res[j]));
-    if (i + 25 < keys.length) await sleep(10500);
+    if (i + 20 < keys.length) await sleep(11000);
   }
   const rank = (prefix, list) => list.map((k) => ({ code: k, value: values[`${prefix}-${k}`] })).filter((x) => x.value > 0).sort((a, b) => b.value - a.value);
   const dayRows = days.map((d) => ({ date: d, visits: values[`d-${d}`] }));
   const data = {
     generatedAt: new Date().toISOString(),
-    total: values.v,
+    total: values.visits,
     last30: dayRows.reduce((s, d) => s + d.visits, 0),
     days: dayRows,
     countries: rank('c', countries),
