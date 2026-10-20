@@ -13,7 +13,17 @@ const browsers = cfg.browsers;
 const days = [];
 for (let i = cfg.days - 1; i >= 0; i--) days.push(new Date(Date.now() - i * 864e5).toISOString().slice(0, 10));
 
-const keys = ['visits', ...days.map((d) => `d-${d}`), ...countries.map((c) => `c-${c}`), ...langs.map((l) => `l-${l}`), ...devices.map((d) => `dv-${d}`), ...browsers.map((b) => `b-${b}`)];
+// Páginas contadas: el mismo criterio que el contador de Base.astro (p-home, p-work, p-project_<slug>...)
+const projects = JSON.parse(readFileSync(new URL('../src/data/projects.json', import.meta.url), 'utf8'));
+const pagesData = JSON.parse(readFileSync(new URL('../src/data/pages.json', import.meta.url), 'utf8'));
+const cats = [...new Set(projects.flatMap((p) => p.categories.map((c) => c.slug)))];
+const pageList = [
+  ['/', 'p-home'], ['/work/', 'p-work'], ['/about/', 'p-about'], ['/contact/', 'p-contact'],
+  ...cats.map((c) => [`/work/${c}/`, `p-work_${c}`]),
+  ...projects.map((p) => [`/project/${p.slug}/`, `p-project_${p.slug}`]),
+  ...Object.keys(pagesData.posts).map((s) => [`/post/${s}/`, `p-post_${s}`]),
+];
+const keys = ['visits', ...days.map((d) => `d-${d}`), ...countries.map((c) => `c-${c}`), ...langs.map((l) => `l-${l}`), ...devices.map((d) => `dv-${d}`), ...browsers.map((b) => `b-${b}`), ...pageList.map(([, k]) => k)];
 
 // El servicio admite 30 peticiones cada 10 s por dirección: tandas de 20 con pausa y, si aun así responde 429, espera y reintenta
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -44,6 +54,7 @@ try {
     languages: rank('l', langs),
     devices: rank('dv', devices),
     browsers: rank('b', browsers),
+    pages: pageList.map(([path, k]) => ({ path, value: values[k] })).filter((x) => x.value > 0).sort((a, b) => b.value - a.value).slice(0, 20),
   };
   writeFileSync(out, JSON.stringify(data));
   console.log(`stats: ${data.total} visitas en total, ${data.last30} en 30 días`);

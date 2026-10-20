@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { langOfUrl, ui, LOCALES, switchPath, SITE_LIVE, TRANSLATIONS_INDEXABLE, SITE_URL, withBase, AUTO_LANGUAGE, LANG_PREF_KEY } from '../lib/i18n';
+import { BASE, langOfUrl, ui, LOCALES, switchPath, SITE_LIVE, TRANSLATIONS_INDEXABLE, SITE_URL, withBase, AUTO_LANGUAGE, LANG_PREF_KEY } from '../lib/i18n';
 import statsCfg from '../lib/stats-config.json';
 interface Props { title: string; description?: string; accent?: string; noindex?: boolean; }
 const { title, description, accent, noindex = false } = Astro.props;
@@ -39,14 +39,22 @@ const autoTargets = AUTO_LANGUAGE && lang === 'en' && !noindex ? Object.fromEntr
         } catch (e) {}
       })();
     </script>}
-    {track && <script is:inline define:vars={{ NS: statsCfg.namespace, API: statsCfg.api, HOST: new URL(SITE_URL).hostname, MAP: countryOf, COUNTRIES: countries, LANGS: statsCfg.languages }}>
+    {track && <script is:inline define:vars={{ NS: statsCfg.namespace, API: statsCfg.api, HOST: new URL(SITE_URL).hostname, MAP: countryOf, COUNTRIES: countries, LANGS: statsCfg.languages, BASE, LOCS: LOCALES.filter((l) => l !== 'en') }}>
       // Cuenta una visita por sesión del navegador: total, día, país (estimado por la zona horaria) e idioma. Sin cookies ni identificadores.
       (function () {
         try {
           if (location.hostname !== HOST) return;
           if (navigator.doNotTrack === '1' || navigator.webdriver) return;
           if (/bot|crawl|spider|headless|lighthouse/i.test(navigator.userAgent)) return;
-          if (localStorage.getItem('lopezlab:no-track') || sessionStorage.getItem('lopezlab:counted')) return;
+          if (localStorage.getItem('lopezlab:no-track')) return;
+          // Página vista (sin idioma ni ruta base): p-home, p-work, p-project_<slug>, p-post_<slug>, p-work_<categoría>...
+          var path = location.pathname;
+          if (BASE && path.indexOf(BASE) === 0) path = path.slice(BASE.length);
+          path = path.replace(new RegExp('^/(' + LOCS.join('|') + ')(?=/|$)'), '').replace(/^\/|\/$/g, '');
+          var pk = 'p-' + (path ? path.toLowerCase().replace(/\//g, '_').replace(/[^a-z0-9_-]/g, '-') : 'home');
+          fetch(API + '/hit/' + NS + '/' + pk, { keepalive: true }).catch(function () {});
+          // El resto (visita, día, país, idioma, dispositivo y navegador) una vez por sesión
+          if (sessionStorage.getItem('lopezlab:counted')) return;
           sessionStorage.setItem('lopezlab:counted', '1');
           var tz = '';
           try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}

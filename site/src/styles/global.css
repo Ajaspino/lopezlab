@@ -522,3 +522,6 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .stats .switch input:checked + .track::after { transform: translateX(1.25rem); }
 .stats .switch input:focus-visible + .track { outline: 2px solid var(--ink); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .stats .switch .track, .stats .switch .track::after { transition: none; } }
+
+.stats .rank.pages a { text-decoration: none; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.stats .rank.pages a:hover { opacity: var(--dim); }

@@ -1,17 +1,36 @@
 ---
 import Base from '../../layouts/Base.astro';
 import data from '../../data/stats.json';
-import { langFrom, langStaticPaths } from '../../lib/i18n';
+import pagesData from '../../data/pages.json';
+import { projectsFor, categoriesFor } from '../../lib/images';
+import { langFrom, langStaticPaths, hrefFor, localize, ui } from '../../lib/i18n';
 export const getStaticPaths = () => langStaticPaths();
 const lang = langFrom(Astro.params.lang);
 // Textos de la página. ES, GL y NL son borrador para que los revise Mariola.
 const T = {
-  en: { title: 'Stats', none: 'No data yet. Numbers will appear here after the first visits, and are refreshed every few hours.', last30: 'Visits · last 30 days', all: 'Visits · all time', best: 'Best day', top: 'Top country', perDay: 'Visits per day', chart: 'Visits per day, {from} to {to}. Best day: {n}.', countries: 'Countries', langs: 'Browser languages', devices: 'Devices', browsers: 'Browsers', mobile: 'Mobile', tablet: 'Tablet', desktop: 'Desktop', other: 'Other', unknown: 'Unknown', samsung: 'Samsung Internet', updated: 'Updated', note: 'Counts visits, not people: one per browser session, no cookies. Country is estimated from the browser’s time zone, so it can be off for travellers or VPNs.', btn: 'Don’t count my visits on this device', locale: 'en-GB' },
-  es: { title: 'Estadísticas', none: 'Aún no hay datos. Los números aparecerán aquí tras las primeras visitas y se actualizan cada pocas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mejor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, del {from} al {to}. Mejor día: {n}.', countries: 'Países', langs: 'Idiomas del navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móvil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Otros', unknown: 'Desconocido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Cuenta visitas, no personas: una por sesión del navegador, sin cookies. El país se estima por la zona horaria del navegador, así que puede fallar con viajeros o VPN.', btn: 'No contar mis visitas en este dispositivo', locale: 'es-ES' },
-  gl: { title: 'Estatísticas', none: 'Aínda non hai datos. Os números aparecerán aquí tras as primeiras visitas e actualízanse cada poucas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mellor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, do {from} ao {to}. Mellor día: {n}.', countries: 'Países', langs: 'Idiomas do navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móbil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Outros', unknown: 'Descoñecido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Conta visitas, non persoas: unha por sesión do navegador, sen cookies. O país estímase pola zona horaria do navegador, así que pode fallar con viaxeiros ou VPN.', btn: 'Non contar as miñas visitas neste dispositivo', locale: 'gl-ES' },
-  nl: { title: 'Statistieken', none: 'Nog geen gegevens. De cijfers verschijnen hier na de eerste bezoeken en worden om de paar uur bijgewerkt.', last30: 'Bezoeken · laatste 30 dagen', all: 'Bezoeken · totaal', best: 'Beste dag', top: 'Belangrijkste land', perDay: 'Bezoeken per dag', chart: 'Bezoeken per dag, van {from} tot {to}. Beste dag: {n}.', countries: 'Landen', langs: 'Browsertalen', devices: 'Apparaten', browsers: 'Browsers', mobile: 'Mobiel', tablet: 'Tablet', desktop: 'Desktop', other: 'Overig', unknown: 'Onbekend', samsung: 'Samsung Internet', updated: 'Bijgewerkt', note: 'Telt bezoeken, geen personen: één per browsersessie, zonder cookies. Het land wordt geschat op basis van de tijdzone van de browser, dus het kan afwijken bij reizigers of VPN.', btn: 'Tel mijn bezoeken op dit apparaat niet mee', locale: 'nl-NL' },
+  en: { pagesTitle: 'Most visited pages', home: 'Home', title: 'Stats', none: 'No data yet. Numbers will appear here after the first visits, and are refreshed every few hours.', last30: 'Visits · last 30 days', all: 'Visits · all time', best: 'Best day', top: 'Top country', perDay: 'Visits per day', chart: 'Visits per day, {from} to {to}. Best day: {n}.', countries: 'Countries', langs: 'Browser languages', devices: 'Devices', browsers: 'Browsers', mobile: 'Mobile', tablet: 'Tablet', desktop: 'Desktop', other: 'Other', unknown: 'Unknown', samsung: 'Samsung Internet', updated: 'Updated', note: 'Counts visits, not people: one per browser session, no cookies. Country is estimated from the browser’s time zone, so it can be off for travellers or VPNs.', btn: 'Don’t count my visits on this device', locale: 'en-GB' },
+  es: { pagesTitle: 'Páginas más vistas', home: 'Inicio', title: 'Estadísticas', none: 'Aún no hay datos. Los números aparecerán aquí tras las primeras visitas y se actualizan cada pocas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mejor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, del {from} al {to}. Mejor día: {n}.', countries: 'Países', langs: 'Idiomas del navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móvil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Otros', unknown: 'Desconocido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Cuenta visitas, no personas: una por sesión del navegador, sin cookies. El país se estima por la zona horaria del navegador, así que puede fallar con viajeros o VPN.', btn: 'No contar mis visitas en este dispositivo', locale: 'es-ES' },
+  gl: { pagesTitle: 'Páxinas máis vistas', home: 'Inicio', title: 'Estatísticas', none: 'Aínda non hai datos. Os números aparecerán aquí tras as primeiras visitas e actualízanse cada poucas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mellor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, do {from} ao {to}. Mellor día: {n}.', countries: 'Países', langs: 'Idiomas do navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móbil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Outros', unknown: 'Descoñecido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Conta visitas, non persoas: unha por sesión do navegador, sen cookies. O país estímase pola zona horaria do navegador, así que pode fallar con viaxeiros ou VPN.', btn: 'Non contar as miñas visitas neste dispositivo', locale: 'gl-ES' },
+  nl: { pagesTitle: 'Meest bezochte pagina’s', home: 'Home', title: 'Statistieken', none: 'Nog geen gegevens. De cijfers verschijnen hier na de eerste bezoeken en worden om de paar uur bijgewerkt.', last30: 'Bezoeken · laatste 30 dagen', all: 'Bezoeken · totaal', best: 'Beste dag', top: 'Belangrijkste land', perDay: 'Bezoeken per dag', chart: 'Bezoeken per dag, van {from} tot {to}. Beste dag: {n}.', countries: 'Landen', langs: 'Browsertalen', devices: 'Apparaten', browsers: 'Browsers', mobile: 'Mobiel', tablet: 'Tablet', desktop: 'Desktop', other: 'Overig', unknown: 'Onbekend', samsung: 'Samsung Internet', updated: 'Bijgewerkt', note: 'Telt bezoeken, geen personen: één per browsersessie, zonder cookies. Het land wordt geschat op basis van de tijdzone van de browser, dus het kan afwijken bij reizigers of VPN.', btn: 'Tel mijn bezoeken op dit apparaat niet mee', locale: 'nl-NL' },
 }[lang];
 const s = data as any;
+// Nombre de cada página en el idioma actual y enlace a ella
+const projectList = projectsFor(lang);
+const categoryList = categoriesFor(lang);
+const postList = (localize(pagesData, lang, 'pages') as any).posts;
+const pageName = (path: string) => {
+  if (path === '/') return T.home;
+  if (path === '/work/') return ui(lang, 'ui.nav.work');
+  if (path === '/about/') return ui(lang, 'ui.nav.about');
+  if (path === '/contact/') return ui(lang, 'ui.nav.contact');
+  const [, kind, slug] = path.split('/');
+  if (kind === 'project') return projectList.find((p) => p.slug === slug)?.title ?? slug;
+  if (kind === 'post') return postList[slug]?.title ?? slug;
+  if (kind === 'work') return categoryList.find((c) => c.slug === slug)?.name ?? slug;
+  return path;
+};
+const topPages: { path: string; value: number }[] = (s.pages ?? []).slice(0, 10);
+const topMax = Math.max(1, ...topPages.map((p) => p.value));
 const has = !!s.generatedAt;
 const dn = (type: 'region' | 'language') => { try { return new Intl.DisplayNames(T.locale, { type }); } catch { return new Intl.DisplayNames('en', { type }); } };
 const regions = dn('region');
@@ -49,6 +68,16 @@ const shareOf = (list: any[], v: number) => { const t = list.reduce((a, x) => a 
           </div>
           <p class="axis"><span>{day(days[0].date)}</span><span>{day(days[days.length - 1].date)}</span></p>
         </section>
+
+
+        {topPages.length > 0 && (
+          <section aria-labelledby="h-pages">
+            <h2 id="h-pages" class="label">{T.pagesTitle}</h2>
+            <ol class="rank pages">
+              {topPages.map((pg) => <li style={`--w:${Math.round((pg.value / topMax) * 100)}%`}><a href={hrefFor(lang, pg.path)}>{pageName(pg.path)}</a><b>{fmt(pg.value)}</b></li>)}
+            </ol>
+          </section>
+        )}
 
         <div class="ranks">
           <section aria-labelledby="h-countries">
