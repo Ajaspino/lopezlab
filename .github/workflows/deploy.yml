@@ -7,8 +7,8 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    # Cada 4 horas: vuelve a leer los contadores de visitas y republica la página /stats/
-    - cron: '17 */4 * * *'
+    # Cada hora (minuto 17): vuelve a leer los contadores de visitas y republica la página /stats/
+    - cron: '17 * * * *'
 
 permissions:
   contents: read
