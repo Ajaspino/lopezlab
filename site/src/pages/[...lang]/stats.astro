@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import data from '../../data/stats.json';
+import statsCfg from '../../lib/stats-config.json';
 import pagesData from '../../data/pages.json';
 import { projectsFor, categoriesFor } from '../../lib/images';
 import { langFrom, langStaticPaths, hrefFor, localize, ui } from '../../lib/i18n';
@@ -8,10 +9,10 @@ export const getStaticPaths = () => langStaticPaths();
 const lang = langFrom(Astro.params.lang);
 // Textos de la página. ES, GL y NL son borrador para que los revise Mariola.
 const T = {
-  en: { pagesTitle: 'Most visited pages', home: 'Home', title: 'Stats', none: 'No data yet. Numbers will appear here after the first visits, and are refreshed every few hours.', last30: 'Visits · last 30 days', all: 'Visits · all time', best: 'Best day', top: 'Top country', perDay: 'Visits per day', chart: 'Visits per day, {from} to {to}. Best day: {n}.', countries: 'Countries', langs: 'Browser languages', devices: 'Devices', browsers: 'Browsers', mobile: 'Mobile', tablet: 'Tablet', desktop: 'Desktop', other: 'Other', unknown: 'Unknown', samsung: 'Samsung Internet', updated: 'Updated', note: 'Data is collected without cookies, without login and without storing personal data on this site. For each browser session we record: a visit, the day, the country (estimated from the browser’s time zone), the browser language, the device type and the browser. Each page opened also adds one view to that page. The counts are stored in a public counting service (abacus.jasoncameron.dev), which receives the visitor’s IP address like any web request; this site does not store it. We count visits, not people, and the country can be off for travellers or VPNs.', btn: 'Don’t count my visits on this device', locale: 'en-GB' },
-  es: { pagesTitle: 'Páginas más vistas', home: 'Inicio', title: 'Estadísticas', none: 'Aún no hay datos. Los números aparecerán aquí tras las primeras visitas y se actualizan cada pocas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mejor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, del {from} al {to}. Mejor día: {n}.', countries: 'Países', langs: 'Idiomas del navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móvil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Otros', unknown: 'Desconocido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Los datos se recogen sin cookies, sin login y sin guardar datos personales en esta web. Por cada sesión del navegador se registran: una visita, el día, el país (estimado por la zona horaria del navegador), el idioma del navegador, el tipo de dispositivo y el navegador. Además, cada página abierta suma una vista a esa página. Los recuentos se guardan en un servicio público de contadores (abacus.jasoncameron.dev), que recibe la dirección IP del visitante como cualquier petición web; esta web no la guarda. Se cuentan visitas, no personas, y el país puede fallar con viajeros o VPN.', btn: 'No contar mis visitas en este dispositivo', locale: 'es-ES' },
-  gl: { pagesTitle: 'Páxinas máis vistas', home: 'Inicio', title: 'Estatísticas', none: 'Aínda non hai datos. Os números aparecerán aquí tras as primeiras visitas e actualízanse cada poucas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mellor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, do {from} ao {to}. Mellor día: {n}.', countries: 'Países', langs: 'Idiomas do navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móbil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Outros', unknown: 'Descoñecido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Os datos recóllense sen cookies, sen login e sen gardar datos persoais nesta web. Por cada sesión do navegador rexístranse: unha visita, o día, o país (estimado pola zona horaria do navegador), o idioma do navegador, o tipo de dispositivo e o navegador. Ademais, cada páxina aberta suma unha vista a esa páxina. Os recontos gárdanse nun servizo público de contadores (abacus.jasoncameron.dev), que recibe a dirección IP do visitante coma en calquera petición web; esta web non a garda. Cóntanse visitas, non persoas, e o país pode fallar con viaxeiros ou VPN.', btn: 'Non contar as miñas visitas neste dispositivo', locale: 'gl-ES' },
-  nl: { pagesTitle: 'Meest bezochte pagina’s', home: 'Home', title: 'Statistieken', none: 'Nog geen gegevens. De cijfers verschijnen hier na de eerste bezoeken en worden om de paar uur bijgewerkt.', last30: 'Bezoeken · laatste 30 dagen', all: 'Bezoeken · totaal', best: 'Beste dag', top: 'Belangrijkste land', perDay: 'Bezoeken per dag', chart: 'Bezoeken per dag, van {from} tot {to}. Beste dag: {n}.', countries: 'Landen', langs: 'Browsertalen', devices: 'Apparaten', browsers: 'Browsers', mobile: 'Mobiel', tablet: 'Tablet', desktop: 'Desktop', other: 'Overig', unknown: 'Onbekend', samsung: 'Samsung Internet', updated: 'Bijgewerkt', note: 'De gegevens worden verzameld zonder cookies, zonder login en zonder persoonsgegevens op deze website op te slaan. Per browsersessie wordt vastgelegd: een bezoek, de dag, het land (geschat op basis van de tijdzone van de browser), de browsertaal, het type apparaat en de browser. Daarnaast telt elke geopende pagina als één weergave van die pagina. De tellingen worden opgeslagen in een openbare tellerdienst (abacus.jasoncameron.dev), die het IP-adres van de bezoeker ontvangt zoals bij elk webverzoek; deze website slaat het niet op. We tellen bezoeken, geen personen, en het land kan afwijken bij reizigers of VPN.', btn: 'Tel mijn bezoeken op dit apparaat niet mee', locale: 'nl-NL' },
+  en: { today: 'Today', live: 'Today and all-time visits are live; the rest is refreshed every few minutes.', pagesTitle: 'Most visited pages', home: 'Home', title: 'Stats', none: 'No data yet. Numbers will appear here after the first visits, and are refreshed every few hours.', last30: 'Visits · last 30 days', all: 'Visits · all time', best: 'Best day', top: 'Top country', perDay: 'Visits per day', chart: 'Visits per day, {from} to {to}. Best day: {n}.', countries: 'Countries', langs: 'Browser languages', devices: 'Devices', browsers: 'Browsers', mobile: 'Mobile', tablet: 'Tablet', desktop: 'Desktop', other: 'Other', unknown: 'Unknown', samsung: 'Samsung Internet', updated: 'Updated', note: 'Data is collected without cookies, without login and without storing personal data on this site. For each browser session we record: a visit, the day, the country (estimated from the browser’s time zone), the browser language, the device type and the browser. Each page opened also adds one view to that page. The counts are stored in a public counting service (abacus.jasoncameron.dev), which receives the visitor’s IP address like any web request; this site does not store it. We count visits, not people, and the country can be off for travellers or VPNs.', btn: 'Don’t count my visits on this device', locale: 'en-GB' },
+  es: { today: 'Hoy', live: 'Las visitas de hoy y las totales se actualizan en vivo; el resto, cada pocos minutos.', pagesTitle: 'Páginas más vistas', home: 'Inicio', title: 'Estadísticas', none: 'Aún no hay datos. Los números aparecerán aquí tras las primeras visitas y se actualizan cada pocas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mejor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, del {from} al {to}. Mejor día: {n}.', countries: 'Países', langs: 'Idiomas del navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móvil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Otros', unknown: 'Desconocido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Los datos se recogen sin cookies, sin login y sin guardar datos personales en esta web. Por cada sesión del navegador se registran: una visita, el día, el país (estimado por la zona horaria del navegador), el idioma del navegador, el tipo de dispositivo y el navegador. Además, cada página abierta suma una vista a esa página. Los recuentos se guardan en un servicio público de contadores (abacus.jasoncameron.dev), que recibe la dirección IP del visitante como cualquier petición web; esta web no la guarda. Se cuentan visitas, no personas, y el país puede fallar con viajeros o VPN.', btn: 'No contar mis visitas en este dispositivo', locale: 'es-ES' },
+  gl: { today: 'Hoxe', live: 'As visitas de hoxe e as totais actualízanse en vivo; o resto, cada poucos minutos.', pagesTitle: 'Páxinas máis vistas', home: 'Inicio', title: 'Estatísticas', none: 'Aínda non hai datos. Os números aparecerán aquí tras as primeiras visitas e actualízanse cada poucas horas.', last30: 'Visitas · últimos 30 días', all: 'Visitas · total', best: 'Mellor día', top: 'País principal', perDay: 'Visitas por día', chart: 'Visitas por día, do {from} ao {to}. Mellor día: {n}.', countries: 'Países', langs: 'Idiomas do navegador', devices: 'Dispositivos', browsers: 'Navegadores', mobile: 'Móbil', tablet: 'Tableta', desktop: 'Escritorio', other: 'Outros', unknown: 'Descoñecido', samsung: 'Samsung Internet', updated: 'Actualizado', note: 'Os datos recóllense sen cookies, sen login e sen gardar datos persoais nesta web. Por cada sesión do navegador rexístranse: unha visita, o día, o país (estimado pola zona horaria do navegador), o idioma do navegador, o tipo de dispositivo e o navegador. Ademais, cada páxina aberta suma unha vista a esa páxina. Os recontos gárdanse nun servizo público de contadores (abacus.jasoncameron.dev), que recibe a dirección IP do visitante coma en calquera petición web; esta web non a garda. Cóntanse visitas, non persoas, e o país pode fallar con viaxeiros ou VPN.', btn: 'Non contar as miñas visitas neste dispositivo', locale: 'gl-ES' },
+  nl: { today: 'Vandaag', live: 'Bezoeken van vandaag en totaal zijn live; de rest wordt om de paar minuten bijgewerkt.', pagesTitle: 'Meest bezochte pagina’s', home: 'Home', title: 'Statistieken', none: 'Nog geen gegevens. De cijfers verschijnen hier na de eerste bezoeken en worden om de paar uur bijgewerkt.', last30: 'Bezoeken · laatste 30 dagen', all: 'Bezoeken · totaal', best: 'Beste dag', top: 'Belangrijkste land', perDay: 'Bezoeken per dag', chart: 'Bezoeken per dag, van {from} tot {to}. Beste dag: {n}.', countries: 'Landen', langs: 'Browsertalen', devices: 'Apparaten', browsers: 'Browsers', mobile: 'Mobiel', tablet: 'Tablet', desktop: 'Desktop', other: 'Overig', unknown: 'Onbekend', samsung: 'Samsung Internet', updated: 'Bijgewerkt', note: 'De gegevens worden verzameld zonder cookies, zonder login en zonder persoonsgegevens op deze website op te slaan. Per browsersessie wordt vastgelegd: een bezoek, de dag, het land (geschat op basis van de tijdzone van de browser), de browsertaal, het type apparaat en de browser. Daarnaast telt elke geopende pagina als één weergave van die pagina. De tellingen worden opgeslagen in een openbare tellerdienst (abacus.jasoncameron.dev), die het IP-adres van de bezoeker ontvangt zoals bij elk webverzoek; deze website slaat het niet op. We tellen bezoeken, geen personen, en het land kan afwijken bij reizigers of VPN.', btn: 'Tel mijn bezoeken op dit apparaat niet mee', locale: 'nl-NL' },
 }[lang];
 const s = data as any;
 // Nombre de cada página en el idioma actual y enlace a ella
@@ -45,6 +46,7 @@ const updated = has ? new Date(s.generatedAt).toLocaleString(T.locale, { dateSty
 const days: { date: string; visits: number }[] = s.days ?? [];
 const max = Math.max(1, ...days.map((d) => d.visits));
 const best = days.reduce((b, d) => (d.visits > (b?.visits ?? -1) ? d : b), null as null | { date: string; visits: number });
+const lastDay = days[days.length - 1];
 const topCountry = s.countries?.find((c: any) => c.code !== 'XX');
 const shareOf = (list: any[], v: number) => { const t = list.reduce((a, x) => a + x.value, 0) || 1; return Math.round((v / t) * 100); };
 ---
@@ -52,19 +54,21 @@ const shareOf = (list: any[], v: number) => { const t = list.reduce((a, x) => a 
   <div class="wrap stats">
     <h1 class="h-1">{T.title}</h1>
     {!has && <p class="lead">{T.none}</p>}
+    <dl class="kpis">
+      <div><dt>{T.today}</dt><dd id="kpi-today">{has && lastDay ? fmt(lastDay.visits) : '–'}</dd></div>
+      {has && <div><dt>{T.last30}</dt><dd id="kpi-30" data-base={s.last30} data-day={lastDay?.date} data-lastval={lastDay?.visits}>{fmt(s.last30)}</dd></div>}
+      <div><dt>{T.all}</dt><dd id="kpi-all">{has ? fmt(s.total) : '–'}</dd></div>
+      {has && <div><dt>{T.best}</dt><dd>{best && best.visits > 0 ? fmt(best.visits) : '–'}<small>{best && best.visits > 0 ? day(best.date) : ''}</small></dd></div>}
+      {has && <div><dt>{T.top}</dt><dd class="txt">{topCountry ? countryName(topCountry.code) : '–'}</dd></div>}
+    </dl>
     {has && (
       <Fragment>
-        <dl class="kpis">
-          <div><dt>{T.last30}</dt><dd>{fmt(s.last30)}</dd></div>
-          <div><dt>{T.all}</dt><dd>{fmt(s.total)}</dd></div>
-          <div><dt>{T.best}</dt><dd>{best && best.visits > 0 ? fmt(best.visits) : '–'}<small>{best && best.visits > 0 ? day(best.date) : ''}</small></dd></div>
-          <div><dt>{T.top}</dt><dd class="txt">{topCountry ? countryName(topCountry.code) : '–'}</dd></div>
-        </dl>
+
 
         <section aria-labelledby="h-days">
           <h2 id="h-days" class="label">{T.perDay}</h2>
-          <div class="bars" role="img" aria-label={T.chart.replace('{from}', day(days[0].date)).replace('{to}', day(days[days.length - 1].date)).replace('{n}', String(best?.visits ?? 0))}>
-            {days.map((d) => <span style={`--h:${Math.max(d.visits ? 3 : 0, Math.round((d.visits / max) * 100))}%`} title={`${day(d.date)}: ${d.visits}`}></span>)}
+          <div class="bars" data-max={max} data-last-day={lastDay?.date} role="img" aria-label={T.chart.replace('{from}', day(days[0].date)).replace('{to}', day(days[days.length - 1].date)).replace('{n}', String(best?.visits ?? 0))}>
+            {days.map((d, i) => <span id={i === days.length - 1 ? 'bar-today' : undefined} style={`--h:${Math.max(d.visits ? 3 : 0, Math.round((d.visits / max) * 100))}%`} title={`${day(d.date)}: ${d.visits}`}></span>)}
           </div>
           <p class="axis"><span>{day(days[0].date)}</span><span>{day(days[days.length - 1].date)}</span></p>
         </section>
@@ -105,13 +109,36 @@ const shareOf = (list: any[], v: number) => { const t = list.reduce((a, x) => a 
             </ol>
           </section>
         </div>
-        <p class="note">{T.updated} {updated}</p>
+        <p class="note">{T.updated} {updated}. {T.live}</p>
       </Fragment>
     )}
     <p class="note">{T.note}</p>
     <label class="switch"><input type="checkbox" role="switch" id="notrack" /><span class="track" aria-hidden="true"></span><span>{T.btn}</span></label>
   </div>
 </Base>
+<script is:inline define:vars={{ NS: statsCfg.namespace, API: statsCfg.api, LOCALE: T.locale }}>
+  // Visitas de hoy y totales en vivo: se piden al contador al abrir la página (el resto de cifras viene de la última actualización programada)
+  (function () {
+    var today = new Date().toISOString().slice(0, 10);
+    function get(k) {
+      return fetch(API + '/get/' + NS + '/' + k).then(function (r) {
+        if (r.status === 404) return 0;
+        if (!r.ok) throw new Error(k);
+        return r.json().then(function (j) { return Number(j.value) || 0; });
+      });
+    }
+    var fmt = function (n) { return n.toLocaleString(LOCALE); };
+    Promise.all([get('visits'), get('d-' + today)]).then(function (v) {
+      var all = document.getElementById('kpi-all'); if (all) all.textContent = fmt(v[0]);
+      var td = document.getElementById('kpi-today'); if (td) td.textContent = fmt(v[1]);
+      var k30 = document.getElementById('kpi-30');
+      // Últimos 30 días: solo se corrige si la foto estática es de hoy (si es más antigua faltarían días intermedios)
+      if (k30 && k30.dataset.day === today) k30.textContent = fmt(Number(k30.dataset.base) - Number(k30.dataset.lastval) + v[1]);
+      var box = document.querySelector('.bars'), bar = document.getElementById('bar-today');
+      if (box && bar && box.dataset.lastDay === today) bar.style.setProperty('--h', Math.max(v[1] ? 3 : 0, Math.min(100, Math.round((v[1] / Number(box.dataset.max)) * 100))) + '%');
+    }).catch(function () {});
+  })();
+</script>
 <script is:inline>
   // Interruptor: activado = este dispositivo no se cuenta (se guarda en el navegador y se puede cambiar cuando quieras)
   (function () {
