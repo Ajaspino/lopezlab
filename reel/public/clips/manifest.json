@@ -1,0 +1,53 @@
+{
+ "home": {
+  "file": "clips/home.mp4",
+  "duration": 8.7,
+  "frames": 261,
+  "taps": []
+ },
+ "work": {
+  "file": "clips/work.mp4",
+  "duration": 6.8,
+  "frames": 204,
+  "taps": [
+   {
+    "t": 4,
+    "x": 149,
+    "y": 198,
+    "sel": ".filters a[href*=\"brands\"]"
+   }
+  ]
+ },
+ "project": {
+  "file": "clips/project.mp4",
+  "duration": 9.6,
+  "frames": 288,
+  "taps": [
+   {
+    "t": 2.2,
+    "x": 195,
+    "y": 198,
+    "sel": "a.card[href*=\"cc-amstel-corporate-identity\"]"
+   }
+  ]
+ },
+ "about": {
+  "file": "clips/about.mp4",
+  "duration": 7.97,
+  "frames": 239,
+  "taps": [
+   {
+    "t": 1.3,
+    "x": 354,
+    "y": 30,
+    "sel": "#menu-toggle"
+   },
+   {
+    "t": 2.8,
+    "x": 64,
+    "y": 444,
+    "sel": ".menu-lang a[hreflang=\"es\"]"
+   }
+  ]
+ }
+}

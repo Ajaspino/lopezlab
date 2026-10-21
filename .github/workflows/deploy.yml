@@ -7,8 +7,9 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    # Cada hora (minuto 17): vuelve a leer los contadores de visitas y republica la página /stats/
-    - cron: '17 * * * *'
+    # Cada 15 minutos (en minutos que no son horas en punto): vuelve a leer los contadores y republica /stats/.
+    # GitHub no garantiza las tareas programadas: descarta algunas cuando hay carga, y pedir más ejecuciones hace que llegue ~cada hora.
+    - cron: '5,20,35,50 * * * *'
 
 permissions:
   contents: read
