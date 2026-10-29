@@ -500,9 +500,17 @@ a, button { transition: opacity var(--dim-ease), color var(--dim-ease); }
 .stats .kpis dd.txt { font-size: clamp(1.25rem, 0.9rem + 1.2vw, 1.75rem); overflow-wrap: anywhere; }
 .stats .kpis small { font-size: 1rem; font-weight: var(--w-light); letter-spacing: 0; color: var(--muted); }
 .stats .label { font-size: var(--t-micro); text-transform: uppercase; letter-spacing: 0.08em; font-weight: var(--w-label, 500); color: var(--muted); margin-bottom: var(--space-4); }
-.stats .bars { display: flex; align-items: flex-end; gap: 3px; height: 9rem; }
-.stats .bars span { flex: 1; height: var(--h); min-height: 2px; background: var(--ink); opacity: 0.9; }
-.stats .bars span[style*="--h:0%"] { min-height: 2px; opacity: 0.15; }
+.stats #h-days { margin-bottom: var(--space-12); }
+.stats .bars-wrap { position: relative; }
+.stats .bars { display: flex; align-items: stretch; gap: 3px; height: 9rem; touch-action: pan-y; }
+.stats .bars .col { flex: 1; display: flex; align-items: flex-end; cursor: default; }
+.stats .bars i { display: block; width: 100%; height: var(--h); min-height: 2px; background: var(--ink); opacity: 0.9; }
+.stats .bars i[style*="--h:0%"] { opacity: 0.15; }
+.stats .bars.hl i { opacity: 0.3; }
+.stats .bars.hl .col.on i { opacity: 1; }
+/* Globo de cada día: instantáneo (sin transición) y fuera del gráfico, sobre la barra elegida */
+.stats .bar-tip { position: absolute; top: -2.4rem; left: 0; transform: translateX(-50%); padding: 0.3rem 0.65rem; background: var(--ink); color: var(--bg); font-size: 0.875rem; font-weight: 500; line-height: 1.3; white-space: nowrap; pointer-events: none; opacity: 0; z-index: 2; }
+.stats .bar-tip.show { opacity: 1; }
 .stats .axis { display: flex; justify-content: space-between; margin-top: var(--space-2); font-size: var(--t-small); color: var(--muted); }
 .stats .ranks { display: grid; gap: var(--space-12); }
 .stats .rank { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
